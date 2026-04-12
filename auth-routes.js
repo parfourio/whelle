@@ -323,7 +323,7 @@ async function handleUpdateMember(req, res, session, parseBody) {
 // ── ADMIN: GET ALL PROVIDERS ──────────────────────────────────
 async function handleAdminGetProviders(req, res) {
   try {
-    const result = await supabase('GET', 'providers?select=id,email,name,modality,location,approved,active,created_at&order=created_at.desc');
+    const result = await supabase('GET', 'providers?select=id,email,name,modality,location,slug,approved,active,created_at&order=created_at.desc');
     res.writeHead(200, {'Content-Type':'application/json'});
     res.end(JSON.stringify({providers: Array.isArray(result.data) ? result.data : []}));
   } catch(e) {

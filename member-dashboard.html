@@ -239,7 +239,7 @@ function renderProviders(providers) {
     return;
   }
   grid.innerHTML = providers.map(p => `
-    <div class="provider-card" onclick="window.open('/provider/${p.slug}','_blank')">
+    <div class="provider-card" onclick="window.open('/provider/${p.slug || p.id}','_blank')">
       <div class="prov-avatar">${p.photo_url ? `<img src="${p.photo_url}" onerror="this.style.display='none'"/>` : (p.name||'?')[0].toUpperCase()}</div>
       <div class="prov-modality">${p.modality || ''}</div>
       <div class="prov-name">${p.name}</div>
