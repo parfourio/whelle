@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>The Intuitive Rose · Tiffany Schultz</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌹</text></svg>"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#fdf8f3;--blush:#f5e8e0;--rose:#c47e8a;--rose-dark:#9e5a66;--rose-pale:#f9eff2;
+  --mauve:#8b6370;--gold:#c9a96e;--text:#2c1f25;--text2:#5a4048;--muted:#9a7a84;
+  --border:#e8d5d9;--border2:#d4b8be;--white:#ffffff;
+  --shadow:0 4px 24px rgba(44,31,37,.08);--shadow-lg:0 12px 48px rgba(44,31,37,.12);
+  --radius:16px;--radius-sm:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--cream);color:var(--text);font-family:'Jost',sans-serif;font-size:15px;line-height:1.7;overflow-x:hidden}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;transition:all .3s}
+nav.scrolled{background:rgba(253,248,243,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);box-shadow:0 1px 12px rgba(44,31,37,.06)}
+.logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:500;color:var(--text);text-decoration:none;letter-spacing:.02em}
+.logo span{color:var(--rose);font-style:italic}
+.nav-links{display:flex;align-items:center;gap:6px;list-style:none}
+.nav-links a{color:var(--text2);text-decoration:none;font-size:13px;font-weight:400;letter-spacing:.04em;padding:7px 14px;border-radius:100px;transition:all .2s}
+.nav-links a:hover{background:var(--rose-pale);color:var(--rose-dark)}
+.nav-cta{background:var(--rose)!important;color:white!important;font-weight:500!important}
+.nav-cta:hover{background:var(--rose-dark)!important}
+.hero{min-height:100vh;display:flex;align-items:center;padding:100px 40px 80px;position:relative;overflow:hidden;background:var(--white)}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 70% at 100% 0%,rgba(196,126,138,.08) 0%,transparent 60%),radial-gradient(ellipse 60% 50% at 0% 100%,rgba(201,169,110,.06) 0%,transparent 50%)}
+.hero-inner{max-width:1100px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 380px;gap:80px;align-items:center;position:relative}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;background:var(--rose-pale);color:var(--rose-dark);font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:6px 14px;border-radius:100px;margin-bottom:20px;border:1px solid rgba(196,126,138,.2)}
+h1{font-family:'Cormorant Garamond',serif;font-size:clamp(44px,5vw,68px);font-weight:400;line-height:1.05;color:var(--text);margin-bottom:20px;letter-spacing:-.3px}
+h1 em{font-style:italic;color:var(--rose)}
+.hero-sub{font-size:16px;color:var(--text2);line-height:1.8;margin-bottom:32px;max-width:480px;font-weight:300}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:40px}
+.btn-primary{background:var(--rose);color:white;padding:14px 28px;border-radius:100px;font-size:13px;font-weight:500;text-decoration:none;letter-spacing:.05em;transition:all .2s;box-shadow:0 4px 16px rgba(196,126,138,.3);display:inline-flex;align-items:center;gap:8px}
+.btn-primary:hover{background:var(--rose-dark);transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--text);padding:14px 24px;border-radius:100px;font-size:13px;font-weight:500;text-decoration:none;letter-spacing:.05em;border:1.5px solid var(--border2);transition:all .2s;display:inline-flex;align-items:center;gap:8px}
+.btn-ghost:hover{border-color:var(--rose);color:var(--rose)}
+.hero-trust{display:flex;align-items:center;gap:16px;font-size:13px;color:var(--muted)}
+.trust-divider{width:1px;height:14px;background:var(--border)}
+.photo-card{position:relative}
+.photo-wrap{border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-lg);background:var(--cream)}
+.photo-wrap img{width:100%;height:auto;display:block}
+.photo-accent{position:absolute;bottom:-16px;left:-16px;width:70px;height:70px;background:var(--rose-pale);border:2px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px}
+.photo-badge{position:absolute;top:20px;right:-16px;background:white;border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 16px;box-shadow:var(--shadow);text-align:center;min-width:120px}
+.badge-label{font-size:11px;color:var(--muted);letter-spacing:.05em;line-height:1.4}
+.about-section{background:var(--blush);padding:100px 40px;border-top:1px solid var(--border)}
+.about-inner{max-width:800px;margin:0 auto;text-align:center}
+.section-tag{display:inline-flex;align-items:center;gap:6px;background:white;color:var(--rose-dark);font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:5px 14px;border-radius:100px;margin-bottom:20px;border:1px solid var(--border)}
+h2{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,4vw,50px);font-weight:400;line-height:1.1;color:var(--text);margin-bottom:20px;letter-spacing:-.2px}
+h2 em{font-style:italic;color:var(--rose)}
+.about-text{font-size:16px;color:var(--text2);line-height:1.9;font-weight:300}
+.about-text p{margin-bottom:18px}
+.about-text p:last-child{margin-bottom:0}
+.services-section{padding:100px 40px;background:var(--white)}
+.services-inner{max-width:1100px;margin:0 auto}
+.services-header{text-align:center;margin-bottom:64px}
+.services-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.service-card{background:var(--cream);border:1px solid var(--border);border-radius:var(--radius);padding:36px 32px;transition:all .25s;position:relative;overflow:hidden}
+.service-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--rose),var(--gold));transform:scaleX(0);transform-origin:left;transition:transform .3s}
+.service-card:hover::before{transform:scaleX(1)}
+.service-card:hover{background:white;box-shadow:var(--shadow);transform:translateY(-2px)}
+.service-icon{font-size:36px;margin-bottom:16px}
+.service-name{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:500;color:var(--text);margin-bottom:12px}
+.service-desc{font-size:14px;color:var(--text2);line-height:1.8;font-weight:300;margin-bottom:24px}
+.service-offerings{display:flex;flex-direction:column;gap:12px;margin-bottom:28px}
+.offering{background:white;border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.offering-name{font-size:13px;font-weight:500;color:var(--text)}
+.offering-price{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:500;color:var(--rose);white-space:nowrap}
+.offering-note{font-size:11px;color:var(--muted);margin-top:2px}
+.service-cta{display:inline-flex;align-items:center;gap:8px;background:var(--rose);color:white;padding:12px 22px;border-radius:100px;font-size:13px;font-weight:500;letter-spacing:.04em;text-decoration:none;transition:all .2s}
+.service-cta:hover{background:var(--rose-dark);transform:translateY(-1px)}
+.service-note{font-size:12px;color:var(--muted);margin-top:14px;font-style:italic;line-height:1.6}
+.testimonials-section{background:var(--blush);padding:100px 40px;border-top:1px solid var(--border)}
+.testimonials-inner{max-width:1100px;margin:0 auto}
+.testimonials-header{text-align:center;margin-bottom:64px}
+.testimonials-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.testimonial-card{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:32px}
+.quote-mark{font-family:'Cormorant Garamond',serif;font-size:72px;color:var(--rose);opacity:.2;line-height:.8;margin-bottom:8px;font-style:italic}
+.testimonial-text{font-size:14px;color:var(--text2);line-height:1.9;font-weight:300;margin-bottom:20px;font-style:italic}
+.testimonial-author{font-size:13px;font-weight:500;color:var(--rose-dark);letter-spacing:.04em}
+.hearts{color:var(--rose);font-size:14px;margin-bottom:12px}
+.quote-section{background:var(--text);padding:80px 40px;text-align:center;position:relative;overflow:hidden}
+.quote-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(196,126,138,.08),transparent)}
+.quote-text{font-family:'Cormorant Garamond',serif;font-size:clamp(22px,3vw,34px);font-style:italic;color:rgba(255,255,255,.9);max-width:700px;margin:0 auto 16px;line-height:1.5;font-weight:300}
+.quote-text::before{content:'\201C';color:var(--rose);font-size:1.2em}
+.quote-text::after{content:'\201D';color:var(--rose);font-size:1.2em}
+.quote-author{font-size:12px;color:rgba(255,255,255,.4);letter-spacing:.12em;text-transform:uppercase;font-weight:500}
+.contact-section{padding:100px 40px;background:var(--white)}
+.contact-inner{max-width:600px;margin:0 auto;text-align:center}
+.contact-card{background:var(--cream);border:1px solid var(--border);border-radius:var(--radius);padding:40px;margin-top:40px;box-shadow:var(--shadow)}
+.contact-item{display:flex;align-items:center;justify-content:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--border);font-size:15px;color:var(--text2)}
+.contact-item:last-child{border-bottom:none}
+.contact-item a{color:var(--rose);text-decoration:none;font-weight:500}
+.contact-item a:hover{color:var(--rose-dark);text-decoration:underline}
+.contact-icon{font-size:18px}
+footer{background:var(--text);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:white;text-decoration:none}
+.footer-logo span{color:var(--rose);font-style:italic}
+.footer-copy{font-size:12px;color:rgba(255,255,255,.35)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.hero-tag{animation:fadeUp .5s ease .1s both}
+.hero-inner h1{animation:fadeUp .5s ease .2s both}
+.hero-sub{animation:fadeUp .5s ease .3s both}
+.hero-actions{animation:fadeUp .5s ease .4s both}
+.hero-trust{animation:fadeUp .5s ease .5s both}
+.photo-card{animation:fadeUp .6s ease .3s both}
+@media(max-width:768px){
+  nav{padding:0 20px}
+  .nav-links{display:none}
+  .hero{padding:100px 20px 60px;min-height:auto}
+  .hero-inner{grid-template-columns:1fr;gap:40px}
+  .photo-badge{display:none}
+  h1{font-size:38px}
+  .about-section,.services-section,.testimonials-section,.contact-section{padding:60px 20px}
+  .services-grid,.testimonials-grid{grid-template-columns:1fr}
+  footer{padding:24px 20px;flex-direction:column;text-align:center}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a href="/" class="logo">The Intuitive <span>Rose</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#testimonials">Testimonials</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ3kpttBKSR-pt9AA92tsXxpGsRebErkMfZ8BVOePpX7c7X4oihfuSUuw3hnxt1dHF4jdVDgIyyy?gv=true" target="_blank" class="nav-cta">Book a Session</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-tag">🌹 Intuitive Guide & Animal Communicator</div>
+      <h1>Connect,<br>Understand,<br><em>and Heal.</em></h1>
+      <p class="hero-sub">I'm Tiffany Schultz  -  here to help you deepen your connection with both animals and yourself through intuitive awareness and energetic understanding.</p>
+      <div class="hero-actions">
+        <a href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ3kpttBKSR-pt9AA92tsXxpGsRebErkMfZ8BVOePpX7c7X4oihfuSUuw3hnxt1dHF4jdVDgIyyy?gv=true" target="_blank" class="btn-primary">Book an Animal Reading 🐾</a>
+        <a href="#services" class="btn-ghost">Explore Sessions</a>
+      </div>
+      <div class="hero-trust">
+        <span>Animal Communication</span>
+        <div class="trust-divider"></div>
+        <span>Human Intuitive Sessions</span>
+        <div class="trust-divider"></div>
+        <span>Bay Area & Remote</span>
+      </div>
+    </div>
+    <div class="photo-card">
+      <div class="photo-wrap">
+        <img src="https://raw.githubusercontent.com/parfourio/intuitive-rose/main/tiffany.jpg" alt="Tiffany Schultz" style="width:100%;height:auto;display:block;object-fit:contain"/>
+      </div>
+      <div class="photo-accent">🌹</div>
+      <div class="photo-badge">
+        <div class="badge-label">Compassionate<br>Intuitive Guidance</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="about-section" id="about">
+  <div class="about-inner">
+    <div class="reveal"><div class="section-tag">About Tiffany</div></div>
+    <h2 class="reveal">A quiet knowing that<br><em>goes beyond words.</em></h2>
+    <div class="about-text reveal">
+      <p>From an early age, I've shared a quiet, natural understanding with animals  -  a sense of knowing that goes beyond words. Over time, that gift has grown into a calling: helping others listen, feel, and heal through intuitive awareness and energetic understanding.</p>
+      <p>Through Animal Communication, I help you discover what your pets are feeling, needing, and trying to express. Whether it's clarifying a behavior, easing anxiety, or strengthening your bond, these sessions bring harmony and mutual understanding between you and your animal companions.</p>
+      <p>Through Human Intuitive Sessions, I offer gentle, insight-driven guidance to help you reconnect with your inner wisdom. These sessions focus on emotional clarity, energetic balance, and the healing awareness that allows you to move forward with peace and confidence.</p>
+    </div>
+  </div>
+</div>
+
+<div class="services-section" id="services">
+  <div class="services-inner">
+    <div class="services-header reveal">
+      <div class="section-tag">Sessions</div>
+      <h2 style="margin-top:16px">How I can <em>help you.</em></h2>
+      <p style="font-size:16px;color:var(--muted);margin-top:12px;font-weight:300">Whether you're seeking to understand your pet's emotions or gain intuitive clarity in your own life.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-icon">🐾</div>
+        <div class="service-name">Animal Communication</div>
+        <p class="service-desc">Animals speak through energy, emotion, and intuition  -  far beyond words. I help bridge that communication between you and your animal companion, bringing harmony, healing, and mutual trust.</p>
+        <div class="service-offerings">
+          <div class="offering">
+            <div><div class="offering-name">One-Hour Session</div><div class="offering-note">Personalized one-on-one for you and your animal</div></div>
+            <div class="offering-price">$75</div>
+          </div>
+          <div class="offering">
+            <div><div class="offering-name">Three-Session Package</div><div class="offering-note">Deep ongoing healing and support through transitions</div></div>
+            <div class="offering-price">$200</div>
+          </div>
+          <div class="offering">
+            <div><div class="offering-name">30-Min Follow-Up</div><div class="offering-note">For returning clients  -  check in and reinforce progress</div></div>
+            <div class="offering-price">$40</div>
+          </div>
+        </div>
+        <a href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ3kpttBKSR-pt9AA92tsXxpGsRebErkMfZ8BVOePpX7c7X4oihfuSUuw3hnxt1dHF4jdVDgIyyy?gv=true" target="_blank" class="service-cta">Book Animal Reading →</a>
+        <p class="service-note">Please share your pet's name, age, gender, and one clear photo at least 24 hours before your session. Your pet does not need to be present.<br><br>✦ Sorry, I do not work with lost pets.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">✨</div>
+        <div class="service-name">Human Intuitive Sessions</div>
+        <p class="service-desc">Energy speaks before words ever do. In these sessions, we connect to your energy field to uncover emotional patterns, inner guidance, and the deeper wisdom that supports your healing and growth.</p>
+        <div class="service-offerings">
+          <div class="offering">
+            <div><div class="offering-name">One-Hour Intuitive Session</div><div class="offering-note">Deep exploration of your emotional energy and life patterns</div></div>
+            <div class="offering-price">$80</div>
+          </div>
+        </div>
+        <a href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ0B_TdU3r1btYPB9XLVMXOPTDtnblYmntBeyAa5rBVK5UDJKtU7cEBgXd4DDgnP4NpUAzmCmi2I?gv=true" target="_blank" class="service-cta">Book Intuitive Session →</a>
+        <p class="service-note">Sessions are compassionate, grounding, and designed to restore emotional balance and peace within. Available remotely.</p>
+        <div style="margin-top:24px;border-radius:var(--radius-sm);overflow:hidden">
+          <img src="https://raw.githubusercontent.com/parfourio/intuitive-rose/main/tiffany-animal.jpg" alt="Tiffany with animal" style="width:100%;object-fit:cover;max-height:280px"/>
+        </div>
+      </div>
+    </div>
+    <div class="reveal" style="margin-top:20px;background:var(--rose-pale);border:1px solid rgba(196,126,138,.2);border-radius:var(--radius-sm);padding:16px 20px;font-size:13px;color:var(--muted);text-align:center">
+      If you need to reschedule, please do so 48 hours or more in advance. All sales are final  -  no refunds. You may reschedule once; additional rescheduling requires rebooking at your own expense.
+    </div>
+  </div>
+</div>
+
+<div class="testimonials-section" id="testimonials">
+  <div class="testimonials-inner">
+    <div class="testimonials-header reveal">
+      <div class="section-tag">Testimonials</div>
+      <h2 style="margin-top:16px">What others have <em>experienced.</em></h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card reveal">
+        <div class="quote-mark">"</div>
+        <div class="hearts">💜💜💜💜💜</div>
+        <p class="testimonial-text">When a homeless feral cat named Jonathon showed up at my house, I had no idea what to do. With no prior information, Tiffany immediately connected with him and gave me insight into his behavior and needs. She even alerted me to a possible health issue I hadn't noticed at all. Since her reading, Jonathon has grown back a full, healthy coat of fur, uses the litter box consistently, and has blossomed into a happy, well-adjusted cat. I cannot recommend Tiffany enough.</p>
+        <div class="testimonial-author"> -  Rachael</div>
+      </div>
+      <div class="testimonial-card reveal">
+        <div class="quote-mark">"</div>
+        <div class="hearts">💜💜💜💜💜</div>
+        <p class="testimonial-text">Tiffany is truly gifted and made such a difference for us. My dog is a rescue who struggles with anxiety. Tiffany helped me understand why he behaves the way he does and gave me so much insight into his personality. She also introduced me to using EFT (tapping) with him, which has been such a gentle and effective way to help him calm down. Even though it's been a couple of years, the things I learned from Tiffany continue to make a difference.</p>
+        <div class="testimonial-author"> -  Carly</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="quote-section">
+  <p class="quote-text">The least I can do is speak out for those who cannot speak for themselves.</p>
+  <div class="quote-author" style="margin-top:16px"> -  Jane Goodall</div>
+</div>
+
+<div class="contact-section" id="contact">
+  <div class="contact-inner">
+    <div class="reveal"><div class="section-tag">Get in Touch</div></div>
+    <h2 class="reveal" style="margin-top:16px">Let's <em>connect.</em></h2>
+    <p class="reveal" style="font-size:16px;color:var(--muted);margin-top:12px;font-weight:300">Ready to begin? Book a session directly or reach out with any questions.</p>
+    <div class="contact-card reveal">
+      <div class="contact-item"><span class="contact-icon">📞</span><a href="tel:4153220185">415.322.0185</a></div>
+      <div class="contact-item"><span class="contact-icon">✉️</span><a href="/cdn-cgi/l/email-protection#2e5a4748484f40576e5a464b47405a5b475a47584b5c415d4b004d4143"><span class="__cf_email__" data-cfemail="43372a2525222d3a03372b262a2d37362a372a3526312c30266d202c2e">tiffany@theintuitiverose.com</span></a></div>
+      <div class="contact-item"><span class="contact-icon">🐾</span><a href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ3kpttBKSR-pt9AA92tsXxpGsRebErkMfZ8BVOePpX7c7X4oihfuSUuw3hnxt1dHF4jdVDgIyyy?gv=true" target="_blank">Book Animal Communication →</a></div>
+      <div class="contact-item"><span class="contact-icon">✨</span><a href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ0B_TdU3r1btYPB9XLVMXOPTDtnblYmntBeyAa5rBVK5UDJKtU7cEBgXd4DDgnP4NpUAzmCmi2I?gv=true" target="_blank">Book Human Intuitive Session →</a></div>
+      <div class="contact-item"><span class="contact-icon">📧</span><a href="/cdn-cgi/l/email-protection#55213c3333343b2c15213d303c3b21203c213c2330273a26307b363a386a2620373f30362168013d27303078063026263c3a3b7067650534363e3432307067653c3b24203c272c">Inquire about 3-Session Package →</a></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <a href="/" class="footer-logo">The Intuitive <span>Rose</span></a>
+  <p class="footer-copy">© 2026 Tiffany Schultz · All rights reserved</p>
+  <p class="footer-copy"><a href="mailto:tiffany@theintuitiverose.com" style="color:rgba(255,255,255,.4);text-decoration:none">tiffany@theintuitiverose.com</a> · 415.322.0185</p>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',window.scrollY>40));
+const obs=new IntersectionObserver((entries)=>{entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*100);obs.unobserve(e.target)}})},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth',block:'start'})})});
+</script>
+</body>
+</html>
