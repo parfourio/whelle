@@ -217,7 +217,7 @@ async function loadProviders() {
     const res = await fetch('/api/providers');
     if (!res.ok) { renderProviders([]); return; }
     const data = await res.json();
-    allProviders = (data.providers || []).filter(p => p.active && p.approved);
+    allProviders = data.providers || [];
     renderProviders(allProviders);
   } catch(e) {
     renderProviders([]);
