@@ -214,7 +214,7 @@ function applyMemberData() {
 
 async function loadProviders() {
   try {
-    const res = await fetch('/api/admin/providers');
+    const res = await fetch('/api/providers');
     if (!res.ok) { renderProviders([]); return; }
     const data = await res.json();
     allProviders = (data.providers || []).filter(p => p.active && p.approved);

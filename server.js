@@ -225,6 +225,9 @@ const server = http.createServer(async (req, res) => {
     }
     return;
   }
+  if (url === '/api/providers' && req.method === 'GET') {
+    await auth.handlePublicProviders(req, res); return;
+  }
   if (url === '/api/admin/check' && req.method === 'GET') {
     if (!adminSession) { res.writeHead(401, {'Content-Type':'application/json'}); res.end(JSON.stringify({error:'Unauthorized'})); return; }
     res.writeHead(200, {'Content-Type':'application/json'}); res.end(JSON.stringify({ok:true})); return;

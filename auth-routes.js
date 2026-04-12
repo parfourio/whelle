@@ -320,6 +320,18 @@ async function handleUpdateMember(req, res, session, parseBody) {
   }
 }
 
+// ── PUBLIC: GET APPROVED PROVIDERS ───────────────────────────
+async function handlePublicProviders(req, res) {
+  try {
+    const result = await supabase('GET', 'providers?select=id,name,bio,photo_url,modality,location,services,slug&approved=eq.true&active=eq.true&order=created_at.desc');
+    res.writeHead(200, {'Content-Type':'application/json'});
+    res.end(JSON.stringify({providers: Array.isArray(result.data) ? result.data : []}));
+  } catch(e) {
+    res.writeHead(500, {'Content-Type':'application/json'});
+    res.end(JSON.stringify({error: e.message}));
+  }
+}
+
 // ── ADMIN: GET ALL PROVIDERS ──────────────────────────────────
 async function handleAdminGetProviders(req, res) {
   try {
@@ -607,6 +619,7 @@ module.exports = {
   handleAdminUpdateProvider,
   handleAdminUpdateMember,
   handlePublicProvider,
+  handlePublicProviders,
   hashPassword,
   verifyPassword,
 };
