@@ -128,6 +128,9 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // ── Static assets ──────────────────────────────────────────
+  if (url === '/favicon.svg') { serveFile(res, path.join(__dirname, 'favicon.svg')); return; }
+
   // ── Public pages ───────────────────────────────────────────
   if (url === '/' || url === '/index.html') { serveFile(res, path.join(__dirname, 'index.html')); return; }
   if (url === '/provider-login' || url === '/provider-login.html') { serveFile(res, path.join(__dirname, 'provider-login.html')); return; }

@@ -242,8 +242,8 @@ footer{background:var(--navy);padding:40px;display:flex;align-items:center;justi
     <li><a href="#modalities">Browse</a></li>
     <li><a href="#how">How it works</a></li>
     <li><a href="#profile">Practitioners</a></li>
-    <li><a href="/provider-login">Provider Login</a></li>
-    <li><a href="/member-login" class="nav-btn">Find Providers</a></li>
+    <li><a href="/provider-login" id="navProviderLink">Provider Login</a></li>
+    <li><a href="/member-login" class="nav-btn" id="navMemberBtn">Find Providers</a></li>
   </ul>
   <button class="hamburger" onclick="toggleMenu()" id="hamburger" aria-label="Menu">
     <span></span><span></span><span></span>
@@ -253,8 +253,8 @@ footer{background:var(--navy);padding:40px;display:flex;align-items:center;justi
 <div class="mobile-menu" id="mobileMenu">
   <a href="#modalities" onclick="closeMenu()">Browse Practitioners</a>
   <a href="#how" onclick="closeMenu()">How it works</a>
-  <a href="/provider-login" onclick="closeMenu()">Provider Login</a>
-  <a href="/member-login" class="mob-btn" onclick="closeMenu()">Find Providers</a>
+  <a href="/provider-login" onclick="closeMenu()" id="mobProviderLink">Provider Login</a>
+  <a href="/member-login" class="mob-btn" onclick="closeMenu()" id="mobMemberBtn">Find Providers</a>
 </div>
 
 <!-- HERO -->
@@ -591,6 +591,41 @@ function updatePrice(sel){
   document.getElementById('service-fee').textContent='$'+fee.toFixed(2);
   document.getElementById('total-fee').textContent='$'+total.toFixed(2);
 }
+
+// Smart nav: swap buttons if user is already logged in
+(async()=>{
+  try {
+    // Check member session
+    const mr = await fetch('/api/member/me');
+    if (mr.ok) {
+      const d = await mr.json();
+      const name = (d.member && d.member.name) ? d.member.name.split(' ')[0] : 'My Dashboard';
+      document.getElementById('navProviderLink').style.display='none';
+      document.getElementById('navMemberBtn').textContent = name + ' →';
+      document.getElementById('navMemberBtn').href = '/member-dashboard';
+      document.getElementById('mobProviderLink').style.display='none';
+      document.getElementById('mobMemberBtn').textContent = name + ' →';
+      document.getElementById('mobMemberBtn').href = '/member-dashboard';
+      return;
+    }
+  } catch(e){}
+  try {
+    // Check provider session
+    const pr = await fetch('/api/provider/me');
+    if (pr.ok) {
+      const d = await pr.json();
+      const name = (d.provider && d.provider.name) ? d.provider.name.split(' ')[0] : 'My Dashboard';
+      document.getElementById('navMemberBtn').style.display='none';
+      document.getElementById('navProviderLink').textContent = name + ' →';
+      document.getElementById('navProviderLink').href = '/provider-dashboard';
+      document.getElementById('navProviderLink').className = 'nav-btn';
+      document.getElementById('mobMemberBtn').style.display='none';
+      document.getElementById('mobProviderLink').textContent = name + ' →';
+      document.getElementById('mobProviderLink').href = '/provider-dashboard';
+      document.getElementById('mobProviderLink').className = 'mob-btn';
+    }
+  } catch(e){}
+})();
 </script>
 </body>
 </html>
