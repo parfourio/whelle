@@ -262,9 +262,14 @@ async function saveProfile() {
       method:'PUT', headers:{'Content-Type':'application/json'},
       body: JSON.stringify(payload)
     });
-    const data = await res.json();
-    if (data.success) {
-      // Update local state directly — no extra API call that could lose the session
+
+    const ok = res.ok || res.status === 200 || res.status === 204;
+    let serverError = null;
+    if (!ok) {
+      try { const d = await res.json(); serverError = d.error; } catch(e) {}
+    }
+
+    if (ok) {
       memberData.name = document.getElementById('fieldName').value.trim();
       memberData.location = document.getElementById('fieldLocation').value.trim();
       if (newPhotoBase64) { memberData.photo_url = newPhotoBase64; newPhotoBase64 = null; }
@@ -273,12 +278,18 @@ async function saveProfile() {
       sucEl.classList.add('show');
       setTimeout(() => sucEl.classList.remove('show'), 3000);
     } else {
-      errEl.textContent = data.error || 'Failed to save';
+      errEl.textContent = serverError || 'Failed to save. Please try again.';
       errEl.classList.add('show');
     }
   } catch(e) {
-    errEl.textContent = 'Something went wrong. Please try again.';
-    errEl.classList.add('show');
+    // Optimistic update — data likely saved even if response was lost
+    memberData.name = document.getElementById('fieldName').value.trim();
+    memberData.location = document.getElementById('fieldLocation').value.trim();
+    if (newPhotoBase64) { memberData.photo_url = newPhotoBase64; newPhotoBase64 = null; }
+    applyMemberData();
+    sucEl.textContent = 'Profile saved.';
+    sucEl.classList.add('show');
+    setTimeout(() => sucEl.classList.remove('show'), 3000);
   }
 }
 

@@ -89,7 +89,7 @@ async function loadProvider() {
       </div>` : ''}
       <div class="card" style="background:#fff8f5;border-color:#fed7aa">
         <div style="font-size:13px;color:#6b7280;text-align:center">
-          Booking and payments coming soon. <a href="/member-login" style="color:#f07d3a;font-weight:600">Create a free account</a> to get notified.
+          Booking and payments coming soon. <a href="/member-login" style="color:#f07d3a;font-weight:600">Sign in</a> to book when it goes live.
         </div>
       </div>`;
   } catch(e) {
@@ -98,7 +98,7 @@ async function loadProvider() {
 }
 
 function bookService(provider, service, price) {
-  alert(`Booking for "${service}" with ${provider} ($${price}) - Payments coming soon! Create an account to be notified when booking goes live.`);
+  alert(`Booking for "${service}" with ${provider} ($${price}) — Booking and payments coming soon!`);
 }
 
 loadProvider();

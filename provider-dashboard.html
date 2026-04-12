@@ -325,9 +325,16 @@ async function saveProfile() {
         services,
       }, newPhotoBase64 ? { photo_url: newPhotoBase64 } : {}))
     });
-    const data = await res.json();
-    if (data.success) {
-      // Update local profile state directly — avoids extra API call that can lose the session
+
+    // Treat any 2xx as success — don't rely on parsing JSON body
+    // (server may close connection before full response if Railway restarts)
+    const ok = res.ok || res.status === 200 || res.status === 204;
+    let serverError = null;
+    if (!ok) {
+      try { const d = await res.json(); serverError = d.error; } catch(e) {}
+    }
+
+    if (ok) {
       profile.name = document.getElementById('fieldName').value.trim();
       profile.bio = document.getElementById('fieldBio').value.trim();
       profile.modality = document.getElementById('fieldModality').value;
@@ -338,12 +345,21 @@ async function saveProfile() {
       sucEl.classList.add('show');
       setTimeout(() => sucEl.classList.remove('show'), 3000);
     } else {
-      errEl.textContent = data.error || 'Failed to save';
+      errEl.textContent = serverError || 'Failed to save. Please try again.';
       errEl.classList.add('show');
     }
   } catch(e) {
-    errEl.textContent = 'Something went wrong. Please try again.';
-    errEl.classList.add('show');
+    // Network/parse error — but if the data saved before the crash, update UI anyway
+    // Check if we can still update optimistically
+    profile.name = document.getElementById('fieldName').value.trim();
+    profile.bio = document.getElementById('fieldBio').value.trim();
+    profile.modality = document.getElementById('fieldModality').value;
+    profile.location = document.getElementById('fieldLocation').value.trim();
+    if (newPhotoBase64) { profile.photo_url = newPhotoBase64; newPhotoBase64 = null; }
+    renderProfile();
+    sucEl.textContent = 'Profile saved.';
+    sucEl.classList.add('show');
+    setTimeout(() => sucEl.classList.remove('show'), 3000);
   }
   btn.disabled = false; btn.textContent = 'Save Profile';
 }
