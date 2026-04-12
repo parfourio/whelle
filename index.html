@@ -243,8 +243,8 @@ footer{background:var(--navy);padding:40px;display:flex;align-items:center;justi
     <li><a href="#modalities">Browse</a></li>
     <li><a href="#how">How it works</a></li>
     <li><a href="#profile">Practitioners</a></li>
-    <li><a href="/member-login">Member Login</a></li>
-    <li><a href="/provider-login" class="nav-btn">Join as Provider</a></li>
+    <li><a href="/provider-login">Provider Login</a></li>
+    <li><a href="/member-login" class="nav-btn">Find Providers</a></li>
   </ul>
   <button class="hamburger" onclick="toggleMenu()" id="hamburger" aria-label="Menu">
     <span></span><span></span><span></span>
@@ -254,8 +254,8 @@ footer{background:var(--navy);padding:40px;display:flex;align-items:center;justi
 <div class="mobile-menu" id="mobileMenu">
   <a href="#modalities" onclick="closeMenu()">Browse Practitioners</a>
   <a href="#how" onclick="closeMenu()">How it works</a>
-  <a href="/member-login" class="mob-login">Member Login</a>
-  <a href="/provider-login" class="mob-btn">Join as Provider</a>
+  <a href="/provider-login" onclick="closeMenu()">Provider Login</a>
+  <a href="/member-login" class="mob-btn" onclick="closeMenu()">Find Providers</a>
 </div>
 
 <!-- HERO -->
