@@ -225,6 +225,10 @@ const server = http.createServer(async (req, res) => {
     }
     return;
   }
+  if (url === '/api/admin/check' && req.method === 'GET') {
+    if (!adminSession) { res.writeHead(401, {'Content-Type':'application/json'}); res.end(JSON.stringify({error:'Unauthorized'})); return; }
+    res.writeHead(200, {'Content-Type':'application/json'}); res.end(JSON.stringify({ok:true})); return;
+  }
   if (url === '/api/admin/providers' && req.method === 'GET') {
     if (!adminSession) { res.writeHead(401, {'Content-Type':'application/json'}); res.end(JSON.stringify({error:'Unauthorized'})); return; }
     await auth.handleAdminGetProviders(req, res); return;
@@ -242,6 +246,16 @@ const server = http.createServer(async (req, res) => {
     if (!adminSession) { res.writeHead(401, {'Content-Type':'application/json'}); res.end(JSON.stringify({error:'Unauthorized'})); return; }
     const id = url.split('/')[4];
     await auth.handleAdminUpdateMember(req, res, id, parseBody); return;
+  }
+  if (url.startsWith('/api/admin/members/') && req.method === 'DELETE') {
+    if (!adminSession) { res.writeHead(401, {'Content-Type':'application/json'}); res.end(JSON.stringify({error:'Unauthorized'})); return; }
+    const id = url.split('/')[4];
+    await auth.handleAdminDeleteMember(req, res, id); return;
+  }
+  if (url.startsWith('/api/admin/providers/') && req.method === 'DELETE') {
+    if (!adminSession) { res.writeHead(401, {'Content-Type':'application/json'}); res.end(JSON.stringify({error:'Unauthorized'})); return; }
+    const id = url.split('/')[4];
+    await auth.handleAdminDeleteProvider(req, res, id); return;
   }
 
   // ── Public provider profile API ────────────────────────────

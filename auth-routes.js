@@ -395,6 +395,30 @@ async function handlePublicProvider(req, res, slug) {
   }
 }
 
+// ── ADMIN: DELETE MEMBER ──────────────────────────────────────
+async function handleAdminDeleteMember(req, res, id) {
+  try {
+    await supabase('DELETE', `members?id=eq.${id}`);
+    res.writeHead(200, {'Content-Type':'application/json'});
+    res.end(JSON.stringify({success:true}));
+  } catch(e) {
+    res.writeHead(500, {'Content-Type':'application/json'});
+    res.end(JSON.stringify({error: e.message}));
+  }
+}
+
+// ── ADMIN: DELETE PROVIDER ────────────────────────────────────
+async function handleAdminDeleteProvider(req, res, id) {
+  try {
+    await supabase('DELETE', `providers?id=eq.${id}`);
+    res.writeHead(200, {'Content-Type':'application/json'});
+    res.end(JSON.stringify({success:true}));
+  } catch(e) {
+    res.writeHead(500, {'Content-Type':'application/json'});
+    res.end(JSON.stringify({error: e.message}));
+  }
+}
+
 // ── EMAIL via Resend ──────────────────────────────────────────
 async function sendEmail(to, subject, html) {
   return new Promise((resolve) => {
@@ -563,6 +587,8 @@ async function handleResetPasswordMember(req, res, parseBody) {
 }
 
 module.exports = {
+  handleAdminDeleteMember,
+  handleAdminDeleteProvider,
   handleProviderSignup,
   handleProviderLogin,
   handleGetProvider,

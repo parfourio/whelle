@@ -54,6 +54,8 @@ tr:hover td{background:#f9fafb}
 .btn-deactivate{background:#fff0f0;color:#dc2626;border:1px solid #fecaca}
 .btn-deactivate:hover{background:#fee2e2}
 .btn-activate{background:#eff8ff;color:#2a7ab5;border:1px solid #bfdbfe}
+.btn-delete{background:#1a202c;color:#fff;border:1px solid #1a202c}
+.btn-delete:hover{background:#dc2626;border-color:#dc2626}
 .btn-primary{background:#2a7ab5;color:#fff;padding:10px 20px;font-size:14px;border-radius:9px}
 .btn-primary:hover{background:#1e6091}
 .alert{padding:10px 14px;border-radius:9px;font-size:13px;margin-bottom:14px;display:none}
@@ -151,6 +153,21 @@ let providers = [];
 let members = [];
 let isLoggedIn = false;
 
+function showAdminPanel() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('mainHeader').style.display = 'flex';
+  document.getElementById('mainPage').style.display = 'block';
+  isLoggedIn = true;
+}
+
+// Auto-authenticate on page load using existing cookie
+(async () => {
+  try {
+    const res = await fetch('/api/admin/check');
+    if (res.ok) { showAdminPanel(); loadAll(); }
+  } catch(e) {}
+})();
+
 function switchTab(tab) {
   document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', (i===0&&tab==='providers')||(i===1&&tab==='members')));
   document.getElementById('providersSection').classList.toggle('active', tab==='providers');
@@ -168,10 +185,7 @@ async function doAdminLogin() {
     const res = await fetch('/api/admin/login', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({username, password}) });
     const data = await res.json();
     if (data.success) {
-      document.getElementById('loginScreen').style.display = 'none';
-      document.getElementById('mainHeader').style.display = 'flex';
-      document.getElementById('mainPage').style.display = 'block';
-      isLoggedIn = true;
+      showAdminPanel();
       loadAll();
     } else {
       errEl.textContent = data.error || 'Invalid credentials';
@@ -191,6 +205,7 @@ async function loadAll() {
 async function loadProviders() {
   try {
     const res = await fetch('/api/admin/providers');
+    if (res.status === 401) { isLoggedIn = false; document.getElementById('loginScreen').style.display = 'flex'; document.getElementById('mainPage').style.display = 'none'; document.getElementById('mainHeader').style.display = 'none'; return; }
     if (!res.ok) return;
     const data = await res.json();
     providers = data.providers || [];
@@ -205,8 +220,8 @@ async function loadMembers() {
     if (!res.ok) return;
     const data = await res.json();
     members = data.members || [];
+    updateStats();
     renderMembers(members);
-    document.getElementById('statMembers').textContent = members.length;
   } catch(e) {}
 }
 
@@ -214,6 +229,7 @@ function updateStats() {
   document.getElementById('statProviders').textContent = providers.length;
   document.getElementById('statPending').textContent = providers.filter(p => !p.approved).length;
   document.getElementById('statActive').textContent = providers.filter(p => p.approved && p.active).length;
+  document.getElementById('statMembers').textContent = members.length;
 }
 
 function renderProviders(list) {
@@ -224,7 +240,7 @@ function renderProviders(list) {
       <th>Provider</th><th>Modality</th><th>Location</th><th>Status</th><th>Approval</th><th>Joined</th><th>Actions</th>
     </tr></thead>
     <tbody>${list.map(p => `
-      <tr>
+      <tr id="prow-${p.id}">
         <td><strong>${p.name || '-'}</strong><br><span style="font-size:11px;color:#6b7280">${p.email}</span></td>
         <td>${p.modality || '-'}</td>
         <td>${p.location || '-'}</td>
@@ -234,7 +250,8 @@ function renderProviders(list) {
         <td>
           <div class="actions">
             ${!p.approved ? `<button class="btn btn-approve" onclick="approveProvider('${p.id}')">Approve</button>` : `<button class="btn btn-deactivate" onclick="unapproveProvider('${p.id}')">Unapprove</button>`}
-            ${p.active ? `<button class="btn btn-deactivate" onclick="toggleProvider('${p.id}', false)">Deactivate</button>` : `<button class="btn btn-activate" onclick="toggleProvider('${p.id}', true)">Activate</button>`}
+            ${p.active ? `<button class="btn btn-deactivate" onclick="toggleProvider('${p.id}',false)">Deactivate</button>` : `<button class="btn btn-activate" onclick="toggleProvider('${p.id}',true)">Activate</button>`}
+            <button class="btn btn-delete" onclick="deleteProvider('${p.id}','${(p.name||p.email).replace(/'/g,'')}')" title="Delete">Delete</button>
           </div>
         </td>
       </tr>`).join('')}
@@ -250,14 +267,15 @@ function renderMembers(list) {
       <th>Member</th><th>Location</th><th>Status</th><th>Joined</th><th>Actions</th>
     </tr></thead>
     <tbody>${list.map(m => `
-      <tr>
+      <tr id="mrow-${m.id}">
         <td><strong>${m.name || '-'}</strong><br><span style="font-size:11px;color:#6b7280">${m.email}</span></td>
         <td>${m.location || '-'}</td>
         <td><span class="pill ${m.active ? 'pill-green' : 'pill-red'}">${m.active ? 'Active' : 'Inactive'}</span></td>
         <td style="color:#6b7280">${m.created_at ? new Date(m.created_at).toLocaleDateString() : '-'}</td>
         <td>
           <div class="actions">
-            ${m.active ? `<button class="btn btn-deactivate" onclick="toggleMember('${m.id}', false)">Deactivate</button>` : `<button class="btn btn-activate" onclick="toggleMember('${m.id}', true)">Activate</button>`}
+            ${m.active ? `<button class="btn btn-deactivate" onclick="toggleMember('${m.id}',false)">Deactivate</button>` : `<button class="btn btn-activate" onclick="toggleMember('${m.id}',true)">Activate</button>`}
+            <button class="btn btn-delete" onclick="deleteMember('${m.id}','${(m.name||m.email).replace(/'/g,'')}')" title="Delete">Delete</button>
           </div>
         </td>
       </tr>`).join('')}
@@ -275,28 +293,47 @@ function searchMembers(q) {
   renderMembers(filtered);
 }
 
+// Update local state and re-render instead of re-fetching (prevents session loss)
 async function approveProvider(id) {
-  await fetch(`/api/admin/providers/${id}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify({approved: true}) });
-  showSuccess('Provider approved.');
-  await loadProviders();
+  await fetch(`/api/admin/providers/${id}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify({approved:true}) });
+  const p = providers.find(x => x.id === id); if (p) p.approved = true;
+  updateStats(); renderProviders(providers); showSuccess('Provider approved.');
 }
 
 async function unapproveProvider(id) {
-  await fetch(`/api/admin/providers/${id}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify({approved: false}) });
-  showSuccess('Provider unapproved.');
-  await loadProviders();
+  await fetch(`/api/admin/providers/${id}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify({approved:false}) });
+  const p = providers.find(x => x.id === id); if (p) p.approved = false;
+  updateStats(); renderProviders(providers); showSuccess('Provider unapproved.');
 }
 
 async function toggleProvider(id, active) {
   await fetch(`/api/admin/providers/${id}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify({active}) });
-  showSuccess(`Provider ${active ? 'activated' : 'deactivated'}.`);
-  await loadProviders();
+  const p = providers.find(x => x.id === id); if (p) p.active = active;
+  updateStats(); renderProviders(providers); showSuccess(`Provider ${active ? 'activated' : 'deactivated'}.`);
 }
 
 async function toggleMember(id, active) {
   await fetch(`/api/admin/members/${id}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify({active}) });
-  showSuccess(`Member ${active ? 'activated' : 'deactivated'}.`);
-  await loadMembers();
+  const m = members.find(x => x.id === id); if (m) m.active = active;
+  updateStats(); renderMembers(members); showSuccess(`Member ${active ? 'activated' : 'deactivated'}.`);
+}
+
+async function deleteMember(id, name) {
+  if (!confirm(`Delete member "${name}"? This cannot be undone.`)) return;
+  const res = await fetch(`/api/admin/members/${id}`, { method:'DELETE' });
+  if (res.ok) {
+    members = members.filter(m => m.id !== id);
+    updateStats(); renderMembers(members); showSuccess(`Member "${name}" deleted.`);
+  }
+}
+
+async function deleteProvider(id, name) {
+  if (!confirm(`Delete provider "${name}"? This cannot be undone.`)) return;
+  const res = await fetch(`/api/admin/providers/${id}`, { method:'DELETE' });
+  if (res.ok) {
+    providers = providers.filter(p => p.id !== id);
+    updateStats(); renderProviders(providers); showSuccess(`Provider "${name}" deleted.`);
+  }
 }
 
 function showSuccess(msg) {
