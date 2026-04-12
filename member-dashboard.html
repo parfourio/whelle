@@ -183,23 +183,32 @@ async function loadMember() {
   try {
     const res = await fetch('/api/member/me');
     if (res.status === 401) { window.location.href = '/member-login'; return; }
+    if (!res.ok) return; // server error — don't redirect, just stay on page
     memberData = await res.json();
-    document.getElementById('pageTitle').textContent = `Welcome back, ${memberData.name.split(' ')[0]}`;
-    document.getElementById('memberName').textContent = memberData.name;
-    document.getElementById('memberEmail').textContent = memberData.email;
-    document.getElementById('memberLocation').textContent = memberData.location || '';
-    const initial = (memberData.name || '?')[0].toUpperCase();
-    document.getElementById('memberInitial').textContent = initial;
-    document.getElementById('uploadInitial').textContent = initial;
-    if (memberData.photo_url) {
-      document.getElementById('memberAvatar').innerHTML = `<img src="${memberData.photo_url}" onerror="this.style.display='none'"/>`;
-      document.getElementById('uploadPreview').innerHTML = `<img src="${memberData.photo_url}" onerror="this.parentElement.innerHTML='<span>${initial}</span>'"/>`;
-    }
-    document.getElementById('fieldName').value = memberData.name || '';
-    document.getElementById('fieldLocation').value = memberData.location || '';
+    applyMemberData();
   } catch(e) {
-    window.location.href = '/member-login';
+    // Network error — don't redirect, user is still logged in
+    console.warn('loadMember network error:', e);
   }
+}
+
+function applyMemberData() {
+  const m = memberData;
+  if (!m) return;
+  const first = (m.name || '').split(' ')[0] || 'there';
+  document.getElementById('pageTitle').textContent = `Welcome back, ${first}`;
+  document.getElementById('memberName').textContent = m.name || '';
+  document.getElementById('memberEmail').textContent = m.email || '';
+  document.getElementById('memberLocation').textContent = m.location || '';
+  const initial = (m.name || '?')[0].toUpperCase();
+  document.getElementById('memberInitial').textContent = initial;
+  document.getElementById('uploadInitial').textContent = initial;
+  if (m.photo_url) {
+    document.getElementById('memberAvatar').innerHTML = `<img src="${m.photo_url}" onerror="this.style.display='none'"/>`;
+    document.getElementById('uploadPreview').innerHTML = `<img src="${m.photo_url}" onerror="this.parentElement.innerHTML='<span>${initial}</span>'"/>`;
+  }
+  document.getElementById('fieldName').value = m.name || '';
+  document.getElementById('fieldLocation').value = m.location || '';
 }
 
 async function loadProviders() {
@@ -255,17 +264,20 @@ async function saveProfile() {
     });
     const data = await res.json();
     if (data.success) {
+      // Update local state directly — no extra API call that could lose the session
+      memberData.name = document.getElementById('fieldName').value.trim();
+      memberData.location = document.getElementById('fieldLocation').value.trim();
+      if (newPhotoBase64) { memberData.photo_url = newPhotoBase64; newPhotoBase64 = null; }
+      applyMemberData();
       sucEl.textContent = 'Profile saved.';
       sucEl.classList.add('show');
-      newPhotoBase64 = null; // clear pending photo
-      await loadMember();
       setTimeout(() => sucEl.classList.remove('show'), 3000);
     } else {
-      errEl.textContent = data.error || 'Failed';
+      errEl.textContent = data.error || 'Failed to save';
       errEl.classList.add('show');
     }
   } catch(e) {
-    errEl.textContent = 'Something went wrong';
+    errEl.textContent = 'Something went wrong. Please try again.';
     errEl.classList.add('show');
   }
 }

@@ -241,14 +241,18 @@ async function loadProfile() {
   try {
     const res = await fetch('/api/provider/me');
     if (res.status === 401) { window.location.href = '/provider-login'; return; }
+    if (!res.ok) return; // server error — stay on page, don't redirect
     const data = await res.json();
-    if (data.error) { window.location.href = '/provider-login'; return; }
-    profile = data;
-    services = Array.isArray(data.services) ? data.services : [];
-    renderProfile();
-    renderServices();
+    if (data.error && !profile) { window.location.href = '/provider-login'; return; }
+    if (!data.error) {
+      profile = data;
+      services = Array.isArray(data.services) ? data.services : [];
+      renderProfile();
+      renderServices();
+    }
   } catch(e) {
-    window.location.href = '/provider-login';
+    // Network error — don't redirect, user is still logged in
+    console.warn('loadProfile error:', e);
   }
 }
 
@@ -323,20 +327,25 @@ async function saveProfile() {
     });
     const data = await res.json();
     if (data.success) {
+      // Update local profile state directly — avoids extra API call that can lose the session
+      profile.name = document.getElementById('fieldName').value.trim();
+      profile.bio = document.getElementById('fieldBio').value.trim();
+      profile.modality = document.getElementById('fieldModality').value;
+      profile.location = document.getElementById('fieldLocation').value.trim();
+      if (newPhotoBase64) { profile.photo_url = newPhotoBase64; newPhotoBase64 = null; }
+      renderProfile();
       sucEl.textContent = 'Profile saved successfully.';
       sucEl.classList.add('show');
-      newPhotoBase64 = null;
-      await loadProfile();
+      setTimeout(() => sucEl.classList.remove('show'), 3000);
     } else {
       errEl.textContent = data.error || 'Failed to save';
       errEl.classList.add('show');
     }
   } catch(e) {
-    errEl.textContent = 'Something went wrong';
+    errEl.textContent = 'Something went wrong. Please try again.';
     errEl.classList.add('show');
   }
   btn.disabled = false; btn.textContent = 'Save Profile';
-  setTimeout(() => sucEl.classList.remove('show'), 3000);
 }
 
 function toggleAddService() {
