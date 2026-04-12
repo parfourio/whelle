@@ -7,7 +7,12 @@ const auth = require('./auth-routes');
 
 const PORT = process.env.PORT || 3000;
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'whelle2026';
+const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH || '';
+const ADMIN_PASSWORD_PLAIN = process.env.ADMIN_PASSWORD || '';
+function checkAdminPassword(input) {
+  if (ADMIN_PASSWORD_HASH) return auth.verifyPassword(input, ADMIN_PASSWORD_HASH);
+  return input === ADMIN_PASSWORD_PLAIN;
+}
 
 // ── Session store ─────────────────────────────────────────────
 const sessions = new Map();
@@ -86,7 +91,7 @@ const server = http.createServer(async (req, res) => {
   // ── Admin login ────────────────────────────────────────────
   if (url === '/admin/login' && req.method === 'POST') {
     const body = await parseBody(req);
-    if (body.username === ADMIN_USERNAME && body.password === ADMIN_PASSWORD) {
+    if (body.username === ADMIN_USERNAME && checkAdminPassword(body.password)) {
       const id = createSession({ role: 'admin' });
       res.writeHead(200, {
         'Content-Type': 'application/json',
@@ -197,7 +202,7 @@ const server = http.createServer(async (req, res) => {
   // ── ADMIN API ──────────────────────────────────────────────
   if (url === '/api/admin/login' && req.method === 'POST') {
     const body = await parseBody(req);
-    if (body.username === ADMIN_USERNAME && body.password === ADMIN_PASSWORD) {
+    if (body.username === ADMIN_USERNAME && checkAdminPassword(body.password)) {
       const id = createSession({ role: 'admin' });
       res.writeHead(200, { 'Content-Type': 'application/json', 'Set-Cookie': `whelle_admin=${id}; HttpOnly; Path=/; Max-Age=28800` });
       res.end(JSON.stringify({ success: true }));
