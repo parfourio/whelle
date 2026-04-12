@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Whelle - Member Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#fff8f5;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Inter',sans-serif;padding:20px}
+.logo{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:#2a7ab5;margin-bottom:32px;text-align:center}
+.logo span{color:#f07d3a}
+.card{background:#fff;border-radius:16px;box-shadow:0 4px 24px rgba(240,125,58,.1);padding:40px;width:100%;max-width:420px}
+.tabs{display:flex;background:#fff8f5;border-radius:10px;padding:4px;margin-bottom:28px;gap:4px}
+.tab{flex:1;padding:10px;text-align:center;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;color:#6b7280;transition:all .2s;border:none;background:transparent;font-family:'Inter',sans-serif}
+.tab.active{background:#fff;color:#f07d3a;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.form-section{display:none}
+.form-section.active{display:block}
+h2{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:#1a202c;margin-bottom:6px}
+.sub{font-size:14px;color:#6b7280;margin-bottom:24px}
+.field{margin-bottom:16px}
+label{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
+input{width:100%;background:#f9fafb;border:1.5px solid #e5e7eb;color:#1a202c;font-family:'Inter',sans-serif;font-size:14px;padding:11px 14px;border-radius:9px;outline:none;transition:border-color .15s}
+input:focus{border-color:#f07d3a;background:#fff}
+.btn{width:100%;background:#f07d3a;color:#fff;border:none;padding:13px;border-radius:9px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:8px}
+.btn:hover{background:#d96a2a}
+.btn:disabled{opacity:.6;cursor:not-allowed}
+.alert{padding:11px 14px;border-radius:9px;font-size:13px;margin-bottom:16px;display:none}
+.alert.show{display:block}
+.alert-error{background:#fff0f0;border:1px solid #fecaca;color:#dc2626}
+.alert-success{background:#f0fdf4;border:1px solid #bbf7d0;color:#15803d}
+.provider-link{text-align:center;margin-top:20px;font-size:13px;color:#6b7280}
+.provider-link a{color:#2a7ab5;font-weight:600;text-decoration:none}
+.back{display:flex;align-items:center;gap:6px;font-size:13px;color:#6b7280;text-decoration:none;margin-bottom:24px}
+.back:hover{color:#f07d3a}
+</style>
+</head>
+<body>
+
+<a href="/" class="back">← Back to Whelle</a>
+
+<div class="logo">wh<span>elle</span></div>
+
+<div class="card">
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('login')">Sign In</button>
+    <button class="tab" onclick="switchTab('signup')">Create Account</button>
+  </div>
+
+  <!-- LOGIN -->
+  <div class="form-section active" id="loginSection">
+    <h2>Welcome back</h2>
+    <p class="sub">Sign in to find and book wellness providers</p>
+    <div class="alert alert-error" id="loginError"></div>
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="loginEmail" placeholder="you@example.com"/>
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="loginPassword" placeholder="Your password"/>
+    </div>
+    <button class="btn" onclick="doLogin()" id="loginBtn">Sign In</button>
+  </div>
+
+  <!-- SIGNUP -->
+  <div class="form-section" id="signupSection">
+    <h2>Join Whelle</h2>
+    <p class="sub">Create a free account to book wellness sessions</p>
+    <div class="alert alert-error" id="signupError"></div>
+    <div class="alert alert-success" id="signupSuccess"></div>
+    <div class="field">
+      <label>Full Name</label>
+      <input type="text" id="signupName" placeholder="Jane Smith"/>
+    </div>
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="signupEmail" placeholder="jane@example.com"/>
+    </div>
+    <div class="field">
+      <label>Password (8+ characters)</label>
+      <input type="password" id="signupPassword" placeholder="Create a strong password"/>
+    </div>
+    <div class="field">
+      <label>Location (optional)</label>
+      <input type="text" id="signupLocation" placeholder="Daytona Beach, FL"/>
+    </div>
+    <button class="btn" onclick="doSignup()" id="signupBtn">Create Free Account</button>
+    <p style="font-size:12px;color:#9ca3af;text-align:center;margin-top:12px">Free to join. No credit card needed.</p>
+  </div>
+</div>
+
+<div class="provider-link">Are you a wellness provider? <a href="/provider-login">Join as a provider</a></div>
+
+<script>
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', (i===0&&tab==='login')||(i===1&&tab==='signup')));
+  document.getElementById('loginSection').classList.toggle('active', tab==='login');
+  document.getElementById('signupSection').classList.toggle('active', tab==='signup');
+}
+
+async function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const errEl = document.getElementById('loginError');
+  const btn = document.getElementById('loginBtn');
+  errEl.classList.remove('show');
+  if (!email || !password) { errEl.textContent = 'Email and password required'; errEl.classList.add('show'); return; }
+  btn.disabled = true; btn.textContent = 'Signing in...';
+  try {
+    const res = await fetch('/api/member/login', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email, password}) });
+    const data = await res.json();
+    if (data.success) {
+      window.location.href = '/member-dashboard';
+    } else {
+      errEl.textContent = data.error || 'Login failed';
+      errEl.classList.add('show');
+    }
+  } catch(e) {
+    errEl.textContent = 'Something went wrong';
+    errEl.classList.add('show');
+  }
+  btn.disabled = false; btn.textContent = 'Sign In';
+}
+
+async function doSignup() {
+  const name = document.getElementById('signupName').value.trim();
+  const email = document.getElementById('signupEmail').value.trim();
+  const password = document.getElementById('signupPassword').value;
+  const location = document.getElementById('signupLocation').value.trim();
+  const errEl = document.getElementById('signupError');
+  const sucEl = document.getElementById('signupSuccess');
+  const btn = document.getElementById('signupBtn');
+  errEl.classList.remove('show'); sucEl.classList.remove('show');
+  if (!name || !email || !password) { errEl.textContent = 'Name, email and password required'; errEl.classList.add('show'); return; }
+  if (password.length < 8) { errEl.textContent = 'Password must be at least 8 characters'; errEl.classList.add('show'); return; }
+  btn.disabled = true; btn.textContent = 'Creating account...';
+  try {
+    const res = await fetch('/api/member/signup', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name, email, password, location}) });
+    const data = await res.json();
+    if (data.success) {
+      sucEl.textContent = 'Account created! Signing you in...';
+      sucEl.classList.add('show');
+      // Auto login
+      const loginRes = await fetch('/api/member/login', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email, password}) });
+      const loginData = await loginRes.json();
+      if (loginData.success) { window.location.href = '/member-dashboard'; return; }
+      setTimeout(() => switchTab('login'), 2000);
+    } else {
+      errEl.textContent = data.error || 'Signup failed';
+      errEl.classList.add('show');
+    }
+  } catch(e) {
+    errEl.textContent = 'Something went wrong';
+    errEl.classList.add('show');
+  }
+  btn.disabled = false; btn.textContent = 'Create Free Account';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Enter') { if (document.getElementById('loginSection').classList.contains('active')) doLogin(); else doSignup(); } });
+</script>
+</body>
+</html>

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Whelle Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f0f6fc;min-height:100vh;font-family:'Inter',sans-serif;color:#1a202c}
+header{background:#1a202c;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#fff}
+.logo span{color:#f07d3a}
+.admin-badge{font-size:11px;font-weight:600;background:#f07d3a;color:#fff;padding:3px 10px;border-radius:100px}
+.logout-btn{font-size:13px;color:#9ca3af;text-decoration:none;padding:6px 12px;border:1px solid #374151;border-radius:8px}
+.logout-btn:hover{border-color:#dc2626;color:#dc2626}
+
+/* Login screen */
+#loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#f0f6fc}
+.login-card{background:#fff;border-radius:14px;padding:40px;width:360px;box-shadow:0 4px 24px rgba(0,0,0,.08)}
+.login-card h2{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:20px}
+.field{margin-bottom:14px}
+label{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
+input{width:100%;background:#f9fafb;border:1.5px solid #e5e7eb;color:#1a202c;font-family:'Inter',sans-serif;font-size:14px;padding:10px 14px;border-radius:9px;outline:none;transition:border-color .15s}
+input:focus{border-color:#2a7ab5;background:#fff}
+
+.page{max-width:1100px;margin:0 auto;padding:40px 24px 80px;display:none}
+.page-title{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;margin-bottom:28px}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+.stat-card{background:#fff;border-radius:12px;border:1px solid #e5e7eb;padding:20px}
+.stat-num{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#2a7ab5}
+.stat-label{font-size:12px;color:#6b7280;text-transform:uppercase;letter-spacing:.05em;margin-top:2px}
+.tabs{display:flex;gap:4px;background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:4px;margin-bottom:24px;width:fit-content}
+.tab{padding:8px 20px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;color:#6b7280;transition:all .2s;border:none;background:transparent;font-family:'Inter',sans-serif}
+.tab.active{background:#1a202c;color:#fff}
+.section{display:none}
+.section.active{display:block}
+.card{background:#fff;border-radius:14px;border:1px solid #e5e7eb;overflow:hidden;margin-bottom:24px}
+.card-header{padding:16px 24px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between}
+.card-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700}
+table{width:100%;border-collapse:collapse}
+th{font-size:11px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.08em;padding:12px 20px;text-align:left;background:#f9fafb;border-bottom:1px solid #e5e7eb}
+td{padding:14px 20px;border-bottom:1px solid #e5e7eb;font-size:13px;color:#374151}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#f9fafb}
+.pill{font-size:11px;font-weight:600;padding:3px 10px;border-radius:100px}
+.pill-green{background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0}
+.pill-orange{background:#fff8f0;color:#f07d3a;border:1px solid #fed7aa}
+.pill-red{background:#fff0f0;color:#dc2626;border:1px solid #fecaca}
+.pill-blue{background:#eff8ff;color:#2a7ab5;border:1px solid #bfdbfe}
+.btn{padding:6px 14px;border-radius:7px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;border:none}
+.btn-approve{background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0}
+.btn-approve:hover{background:#dcfce7}
+.btn-deactivate{background:#fff0f0;color:#dc2626;border:1px solid #fecaca}
+.btn-deactivate:hover{background:#fee2e2}
+.btn-activate{background:#eff8ff;color:#2a7ab5;border:1px solid #bfdbfe}
+.btn-primary{background:#2a7ab5;color:#fff;padding:10px 20px;font-size:14px;border-radius:9px}
+.btn-primary:hover{background:#1e6091}
+.alert{padding:10px 14px;border-radius:9px;font-size:13px;margin-bottom:14px;display:none}
+.alert.show{display:block}
+.alert-success{background:#f0fdf4;border:1px solid #bbf7d0;color:#15803d}
+.alert-error{background:#fff0f0;border:1px solid #fecaca;color:#dc2626}
+.empty{text-align:center;padding:40px;color:#6b7280;font-size:14px}
+.actions{display:flex;gap:6px}
+.search-bar{padding:8px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px;font-family:'Inter',sans-serif;outline:none;width:220px}
+.search-bar:focus{border-color:#2a7ab5}
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;margin-bottom:4px">wh<span style="color:#f07d3a">elle</span></div>
+    <div style="font-size:13px;color:#6b7280;margin-bottom:24px">Admin Panel</div>
+    <div class="alert alert-error" id="loginError" style="display:none"></div>
+    <div class="field">
+      <label>Username</label>
+      <input type="text" id="adminUser" placeholder="admin"/>
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="adminPass" placeholder="Password"/>
+    </div>
+    <button class="btn btn-primary" onclick="doAdminLogin()" style="width:100%;margin-top:8px" id="loginBtn">Sign In</button>
+  </div>
+</div>
+
+<!-- MAIN ADMIN UI -->
+<header style="display:none" id="mainHeader">
+  <div style="display:flex;align-items:center;gap:12px">
+    <div class="logo">wh<span>elle</span></div>
+    <span class="admin-badge">Admin</span>
+  </div>
+  <a href="/admin/logout" class="logout-btn">Sign out</a>
+</header>
+
+<div class="page" id="mainPage">
+  <div class="page-title">Admin Panel</div>
+  <div class="alert alert-success" id="globalSuccess"></div>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-num" id="statProviders">-</div>
+      <div class="stat-label">Total Providers</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="statPending">-</div>
+      <div class="stat-label">Pending Approval</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="statMembers">-</div>
+      <div class="stat-label">Total Members</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="statActive">-</div>
+      <div class="stat-label">Active Providers</div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('providers')">Providers</button>
+    <button class="tab" onclick="switchTab('members')">Members</button>
+  </div>
+
+  <!-- PROVIDERS -->
+  <div class="section active" id="providersSection">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">All Providers</div>
+        <input class="search-bar" placeholder="Search providers..." oninput="searchProviders(this.value)"/>
+      </div>
+      <div id="providersTable"><div class="empty">Loading...</div></div>
+    </div>
+  </div>
+
+  <!-- MEMBERS -->
+  <div class="section" id="membersSection">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">All Members</div>
+        <input class="search-bar" placeholder="Search members..." oninput="searchMembers(this.value)"/>
+      </div>
+      <div id="membersTable"><div class="empty">Loading...</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+let providers = [];
+let members = [];
+let isLoggedIn = false;
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', (i===0&&tab==='providers')||(i===1&&tab==='members')));
+  document.getElementById('providersSection').classList.toggle('active', tab==='providers');
+  document.getElementById('membersSection').classList.toggle('active', tab==='members');
+}
+
+async function doAdminLogin() {
+  const username = document.getElementById('adminUser').value.trim();
+  const password = document.getElementById('adminPass').value;
+  const errEl = document.getElementById('loginError');
+  const btn = document.getElementById('loginBtn');
+  errEl.style.display = 'none';
+  btn.disabled = true; btn.textContent = 'Signing in...';
+  try {
+    const res = await fetch('/api/admin/login', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({username, password}) });
+    const data = await res.json();
+    if (data.success) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('mainHeader').style.display = 'flex';
+      document.getElementById('mainPage').style.display = 'block';
+      isLoggedIn = true;
+      loadAll();
+    } else {
+      errEl.textContent = data.error || 'Invalid credentials';
+      errEl.style.display = 'block';
+    }
+  } catch(e) {
+    errEl.textContent = 'Something went wrong';
+    errEl.style.display = 'block';
+  }
+  btn.disabled = false; btn.textContent = 'Sign In';
+}
+
+async function loadAll() {
+  await Promise.all([loadProviders(), loadMembers()]);
+}
+
+async function loadProviders() {
+  try {
+    const res = await fetch('/api/admin/providers');
+    if (!res.ok) return;
+    const data = await res.json();
+    providers = data.providers || [];
+    updateStats();
+    renderProviders(providers);
+  } catch(e) {}
+}
+
+async function loadMembers() {
+  try {
+    const res = await fetch('/api/admin/members');
+    if (!res.ok) return;
+    const data = await res.json();
+    members = data.members || [];
+    renderMembers(members);
+    document.getElementById('statMembers').textContent = members.length;
+  } catch(e) {}
+}
+
+function updateStats() {
+  document.getElementById('statProviders').textContent = providers.length;
+  document.getElementById('statPending').textContent = providers.filter(p => !p.approved).length;
+  document.getElementById('statActive').textContent = providers.filter(p => p.approved && p.active).length;
+}
+
+function renderProviders(list) {
+  const el = document.getElementById('providersTable');
+  if (!list.length) { el.innerHTML = '<div class="empty">No providers yet.</div>'; return; }
+  el.innerHTML = `<table>
+    <thead><tr>
+      <th>Provider</th><th>Modality</th><th>Location</th><th>Status</th><th>Approval</th><th>Joined</th><th>Actions</th>
+    </tr></thead>
+    <tbody>${list.map(p => `
+      <tr>
+        <td><strong>${p.name || '-'}</strong><br><span style="font-size:11px;color:#6b7280">${p.email}</span></td>
+        <td>${p.modality || '-'}</td>
+        <td>${p.location || '-'}</td>
+        <td><span class="pill ${p.active ? 'pill-green' : 'pill-red'}">${p.active ? 'Active' : 'Inactive'}</span></td>
+        <td><span class="pill ${p.approved ? 'pill-blue' : 'pill-orange'}">${p.approved ? 'Approved' : 'Pending'}</span></td>
+        <td style="color:#6b7280">${p.created_at ? new Date(p.created_at).toLocaleDateString() : '-'}</td>
+        <td>
+          <div class="actions">
+            ${!p.approved ? `<button class="btn btn-approve" onclick="approveProvider('${p.id}')">Approve</button>` : `<button class="btn btn-deactivate" onclick="unapproveProvider('${p.id}')">Unapprove</button>`}
+            ${p.active ? `<button class="btn btn-deactivate" onclick="toggleProvider('${p.id}', false)">Deactivate</button>` : `<button class="btn btn-activate" onclick="toggleProvider('${p.id}', true)">Activate</button>`}
+          </div>
+        </td>
+      </tr>`).join('')}
+    </tbody>
+  </table>`;
+}
+
+function renderMembers(list) {
+  const el = document.getElementById('membersTable');
+  if (!list.length) { el.innerHTML = '<div class="empty">No members yet.</div>'; return; }
+  el.innerHTML = `<table>
+    <thead><tr>
+      <th>Member</th><th>Location</th><th>Status</th><th>Joined</th><th>Actions</th>
+    </tr></thead>
+    <tbody>${list.map(m => `
+      <tr>
+        <td><strong>${m.name || '-'}</strong><br><span style="font-size:11px;color:#6b7280">${m.email}</span></td>
+        <td>${m.location || '-'}</td>
+        <td><span class="pill ${m.active ? 'pill-green' : 'pill-red'}">${m.active ? 'Active' : 'Inactive'}</span></td>
+        <td style="color:#6b7280">${m.created_at ? new Date(m.created_at).toLocaleDateString() : '-'}</td>
+        <td>
+          <div class="actions">
+            ${m.active ? `<button class="btn btn-deactivate" onclick="toggleMember('${m.id}', false)">Deactivate</button>` : `<button class="btn btn-activate" onclick="toggleMember('${m.id}', true)">Activate</button>`}
+          </div>
+        </td>
+      </tr>`).join('')}
+    </tbody>
+  </table>`;
+}
+
+function searchProviders(q) {
+  const filtered = providers.filter(p => (p.name||'').toLowerCase().includes(q.toLowerCase()) || (p.email||'').toLowerCase().includes(q.toLowerCase()) || (p.modality||'').toLowerCase().includes(q.toLowerCase()));
+  renderProviders(filtered);
+}
+
+function searchMembers(q) {
+  const filtered = members.filter(m => (m.name||'').toLowerCase().includes(q.toLowerCase()) || (m.email||'').toLowerCase().includes(q.toLowerCase()));
+  renderMembers(filtered);
+}
+
+async function approveProvider(id) {
+  await fetch(`/api/admin/providers/${id}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify({approved: true}) });
+  showSuccess('Provider approved.');
+  await loadProviders();
+}
+
+async function unapproveProvider(id) {
+  await fetch(`/api/admin/providers/${id}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify({approved: false}) });
+  showSuccess('Provider unapproved.');
+  await loadProviders();
+}
+
+async function toggleProvider(id, active) {
+  await fetch(`/api/admin/providers/${id}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify({active}) });
+  showSuccess(`Provider ${active ? 'activated' : 'deactivated'}.`);
+  await loadProviders();
+}
+
+async function toggleMember(id, active) {
+  await fetch(`/api/admin/members/${id}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify({active}) });
+  showSuccess(`Member ${active ? 'activated' : 'deactivated'}.`);
+  await loadMembers();
+}
+
+function showSuccess(msg) {
+  const el = document.getElementById('globalSuccess');
+  el.textContent = '✓ ' + msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Enter' && !isLoggedIn) doAdminLogin(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Whelle - Provider Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f0f6fc;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Inter',sans-serif;padding:20px}
+.logo{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:#2a7ab5;margin-bottom:32px;text-align:center}
+.logo span{color:#f07d3a}
+.card{background:#fff;border-radius:16px;box-shadow:0 4px 24px rgba(42,122,181,.1);padding:40px;width:100%;max-width:420px}
+.tabs{display:flex;background:#f0f6fc;border-radius:10px;padding:4px;margin-bottom:28px;gap:4px}
+.tab{flex:1;padding:10px;text-align:center;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;color:#6b7280;transition:all .2s;border:none;background:transparent;font-family:'Inter',sans-serif}
+.tab.active{background:#fff;color:#2a7ab5;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.form-section{display:none}
+.form-section.active{display:block}
+h2{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:#1a202c;margin-bottom:6px}
+.sub{font-size:14px;color:#6b7280;margin-bottom:24px}
+.field{margin-bottom:16px}
+label{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
+input,select{width:100%;background:#f9fafb;border:1.5px solid #e5e7eb;color:#1a202c;font-family:'Inter',sans-serif;font-size:14px;padding:11px 14px;border-radius:9px;outline:none;transition:border-color .15s}
+input:focus,select:focus{border-color:#2a7ab5;background:#fff}
+.btn{width:100%;background:#2a7ab5;color:#fff;border:none;padding:13px;border-radius:9px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:8px}
+.btn:hover{background:#1e6091}
+.btn:disabled{opacity:.6;cursor:not-allowed}
+.alert{padding:11px 14px;border-radius:9px;font-size:13px;margin-bottom:16px;display:none}
+.alert.show{display:block}
+.alert-error{background:#fff0f0;border:1px solid #fecaca;color:#dc2626}
+.alert-success{background:#f0fdf4;border:1px solid #bbf7d0;color:#15803d}
+.divider{text-align:center;font-size:13px;color:#9ca3af;margin:20px 0;position:relative}
+.divider::before,.divider::after{content:'';position:absolute;top:50%;width:42%;height:1px;background:#e5e7eb}
+.divider::before{left:0}.divider::after{right:0}
+.member-link{text-align:center;margin-top:20px;font-size:13px;color:#6b7280}
+.member-link a{color:#f07d3a;font-weight:600;text-decoration:none}
+.back{display:flex;align-items:center;gap:6px;font-size:13px;color:#6b7280;text-decoration:none;margin-bottom:24px}
+.back:hover{color:#2a7ab5}
+.modality-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.modality-opt{padding:8px 10px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px;cursor:pointer;text-align:center;transition:all .15s;color:#374151}
+.modality-opt.selected{border-color:#2a7ab5;background:#eff8ff;color:#2a7ab5;font-weight:600}
+</style>
+</head>
+<body>
+
+<a href="/" class="back">← Back to Whelle</a>
+
+<div class="logo">wh<span>elle</span></div>
+
+<div class="card">
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('login')">Sign In</button>
+    <button class="tab" onclick="switchTab('signup')">Join as Provider</button>
+  </div>
+
+  <!-- LOGIN -->
+  <div class="form-section active" id="loginSection">
+    <h2>Welcome back</h2>
+    <p class="sub">Sign in to your provider account</p>
+    <div class="alert alert-error" id="loginError"></div>
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="loginEmail" placeholder="you@example.com"/>
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="loginPassword" placeholder="Your password"/>
+    </div>
+    <button class="btn" onclick="doLogin()" id="loginBtn">Sign In</button>
+  </div>
+
+  <!-- SIGNUP -->
+  <div class="form-section" id="signupSection">
+    <h2>Become a provider</h2>
+    <p class="sub">Create your account. Your profile goes live after approval.</p>
+    <div class="alert alert-error" id="signupError"></div>
+    <div class="alert alert-success" id="signupSuccess"></div>
+    <div class="field">
+      <label>Full Name</label>
+      <input type="text" id="signupName" placeholder="Jane Smith"/>
+    </div>
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="signupEmail" placeholder="jane@example.com"/>
+    </div>
+    <div class="field">
+      <label>Password (8+ characters)</label>
+      <input type="password" id="signupPassword" placeholder="Create a strong password"/>
+    </div>
+    <div class="field">
+      <label>Your Modality</label>
+      <div class="modality-grid" id="modalityGrid">
+        <div class="modality-opt" onclick="selectModality(this,'Personal Training')">Personal Training</div>
+        <div class="modality-opt" onclick="selectModality(this,'Massage Therapy')">Massage Therapy</div>
+        <div class="modality-opt" onclick="selectModality(this,'Yoga / Pilates')">Yoga / Pilates</div>
+        <div class="modality-opt" onclick="selectModality(this,'Nutrition')">Nutrition</div>
+        <div class="modality-opt" onclick="selectModality(this,'Acupuncture')">Acupuncture</div>
+        <div class="modality-opt" onclick="selectModality(this,'Sound Healing')">Sound Healing</div>
+        <div class="modality-opt" onclick="selectModality(this,'Therapy')">Therapy</div>
+        <div class="modality-opt" onclick="selectModality(this,'Intuitive / Energy')">Intuitive / Energy</div>
+        <div class="modality-opt" onclick="selectModality(this,'Peptides / Wellness')">Peptides / Wellness</div>
+        <div class="modality-opt" onclick="selectModality(this,'Other')">Other</div>
+      </div>
+      <input type="hidden" id="signupModality"/>
+    </div>
+    <div class="field">
+      <label>Location</label>
+      <input type="text" id="signupLocation" placeholder="Daytona Beach, FL"/>
+    </div>
+    <button class="btn" onclick="doSignup()" id="signupBtn">Create Provider Account</button>
+  </div>
+</div>
+
+<div class="member-link">Looking for services? <a href="/member-login">Sign in as a member</a></div>
+
+<script>
+let selectedModality = '';
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', (i===0&&tab==='login')||(i===1&&tab==='signup')));
+  document.getElementById('loginSection').classList.toggle('active', tab==='login');
+  document.getElementById('signupSection').classList.toggle('active', tab==='signup');
+}
+
+function selectModality(el, val) {
+  document.querySelectorAll('.modality-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedModality = val;
+  document.getElementById('signupModality').value = val;
+}
+
+async function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const errEl = document.getElementById('loginError');
+  const btn = document.getElementById('loginBtn');
+  errEl.classList.remove('show');
+  if (!email || !password) { errEl.textContent = 'Email and password required'; errEl.classList.add('show'); return; }
+  btn.disabled = true; btn.textContent = 'Signing in...';
+  try {
+    const res = await fetch('/api/provider/login', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email, password}) });
+    const data = await res.json();
+    if (data.success) {
+      window.location.href = '/provider-dashboard';
+    } else {
+      errEl.textContent = data.error || 'Login failed';
+      errEl.classList.add('show');
+    }
+  } catch(e) {
+    errEl.textContent = 'Something went wrong';
+    errEl.classList.add('show');
+  }
+  btn.disabled = false; btn.textContent = 'Sign In';
+}
+
+async function doSignup() {
+  const name = document.getElementById('signupName').value.trim();
+  const email = document.getElementById('signupEmail').value.trim();
+  const password = document.getElementById('signupPassword').value;
+  const modality = selectedModality;
+  const location = document.getElementById('signupLocation').value.trim();
+  const errEl = document.getElementById('signupError');
+  const sucEl = document.getElementById('signupSuccess');
+  const btn = document.getElementById('signupBtn');
+  errEl.classList.remove('show'); sucEl.classList.remove('show');
+  if (!name || !email || !password) { errEl.textContent = 'Name, email and password required'; errEl.classList.add('show'); return; }
+  if (password.length < 8) { errEl.textContent = 'Password must be at least 8 characters'; errEl.classList.add('show'); return; }
+  btn.disabled = true; btn.textContent = 'Creating account...';
+  try {
+    const res = await fetch('/api/provider/signup', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name, email, password, modality, location}) });
+    const data = await res.json();
+    if (data.success) {
+      sucEl.textContent = 'Account created! Sign in to complete your profile. Your listing goes live after admin approval.';
+      sucEl.classList.add('show');
+      setTimeout(() => switchTab('login'), 3000);
+    } else {
+      errEl.textContent = data.error || 'Signup failed';
+      errEl.classList.add('show');
+    }
+  } catch(e) {
+    errEl.textContent = 'Something went wrong';
+    errEl.classList.add('show');
+  }
+  btn.disabled = false; btn.textContent = 'Create Provider Account';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Enter') { if (document.getElementById('loginSection').classList.contains('active')) doLogin(); else doSignup(); } });
+</script>
+</body>
+</html>

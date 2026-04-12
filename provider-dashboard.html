@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Whelle - Provider Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f0f6fc;min-height:100vh;font-family:'Inter',sans-serif;color:#1a202c}
+header{background:#fff;border-bottom:1px solid #e5e7eb;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#2a7ab5;text-decoration:none}
+.logo span{color:#f07d3a}
+.header-right{display:flex;align-items:center;gap:12px}
+.badge{font-size:11px;font-weight:600;padding:4px 10px;border-radius:100px;background:#fff8f0;color:#f07d3a;border:1px solid #fed7aa}
+.logout{font-size:13px;color:#6b7280;text-decoration:none;padding:6px 12px;border:1px solid #e5e7eb;border-radius:8px}
+.logout:hover{border-color:#dc2626;color:#dc2626}
+.page{max-width:900px;margin:0 auto;padding:40px 24px 80px}
+.page-title{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;margin-bottom:4px}
+.page-sub{font-size:14px;color:#6b7280;margin-bottom:32px}
+.grid{display:grid;grid-template-columns:1fr 2fr;gap:24px;align-items:start}
+@media(max-width:680px){.grid{grid-template-columns:1fr}}
+.card{background:#fff;border-radius:14px;border:1px solid #e5e7eb;padding:24px;margin-bottom:24px}
+.card-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:16px;color:#1a202c}
+.avatar{width:100px;height:100px;border-radius:50%;background:#dbeafe;display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:700;color:#2a7ab5;margin:0 auto 16px;overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.status-pill{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:4px 10px;border-radius:100px;margin-bottom:12px}
+.status-pending{background:#fff8f0;color:#f07d3a;border:1px solid #fed7aa}
+.status-approved{background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0}
+.stat{text-align:center;padding:12px;background:#f9fafb;border-radius:9px;margin-bottom:8px}
+.stat-num{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:#2a7ab5}
+.stat-label{font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:.05em}
+.field{margin-bottom:16px}
+label{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
+input,textarea,select{width:100%;background:#f9fafb;border:1.5px solid #e5e7eb;color:#1a202c;font-family:'Inter',sans-serif;font-size:14px;padding:10px 14px;border-radius:9px;outline:none;transition:border-color .15s;resize:vertical}
+input:focus,textarea:focus,select:focus{border-color:#2a7ab5;background:#fff}
+.btn{padding:11px 20px;border-radius:9px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;border:none}
+.btn-primary{background:#2a7ab5;color:#fff}
+.btn-primary:hover{background:#1e6091}
+.btn-primary:disabled{opacity:.6;cursor:not-allowed}
+.btn-ghost{background:#fff;color:#374151;border:1.5px solid #e5e7eb}
+.btn-ghost:hover{border-color:#2a7ab5;color:#2a7ab5}
+.btn-danger{background:#fff0f0;color:#dc2626;border:1.5px solid #fecaca}
+.alert{padding:10px 14px;border-radius:9px;font-size:13px;margin-bottom:14px;display:none}
+.alert.show{display:block}
+.alert-success{background:#f0fdf4;border:1px solid #bbf7d0;color:#15803d}
+.alert-error{background:#fff0f0;border:1px solid #fecaca;color:#dc2626}
+.services-list{display:flex;flex-direction:column;gap:10px}
+.service-item{display:flex;align-items:center;gap:10px;padding:12px;background:#f9fafb;border-radius:9px;border:1px solid #e5e7eb}
+.service-name{flex:1;font-weight:600;font-size:14px}
+.service-price{font-size:14px;color:#2a7ab5;font-weight:700}
+.service-duration{font-size:12px;color:#6b7280}
+.btn-icon{width:28px;height:28px;border-radius:6px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;background:#fff0f0;color:#dc2626}
+.add-service-form{background:#f0f6fc;border-radius:9px;padding:16px;margin-top:12px;display:none}
+.add-service-form.open{display:block}
+.service-row{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:8px;align-items:end}
+.url-preview{font-size:12px;color:#6b7280;margin-top:4px}
+.url-preview a{color:#2a7ab5}
+.photo-input-wrap{display:flex;gap:10px;align-items:center}
+.photo-input-wrap input{flex:1}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">wh<span>elle</span></a>
+  <div class="header-right">
+    <span class="badge" id="approvalBadge">Pending Approval</span>
+    <a href="/logout" class="logout">Sign out</a>
+  </div>
+</header>
+
+<div class="page">
+  <div class="page-title">Provider Dashboard</div>
+  <p class="page-sub" id="welcomeName">Welcome back</p>
+
+  <div class="grid">
+
+    <!-- LEFT: profile card -->
+    <div>
+      <div class="card">
+        <div class="avatar" id="avatarEl"><span id="avatarInitial">?</span></div>
+        <div style="text-align:center">
+          <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700" id="sidebarName">Loading...</div>
+          <div style="font-size:13px;color:#6b7280;margin-top:2px" id="sidebarModality"></div>
+          <div style="font-size:13px;color:#6b7280" id="sidebarLocation"></div>
+          <div class="status-pill status-pending" id="statusPill" style="margin-top:8px">Pending Approval</div>
+        </div>
+        <div style="margin-top:16px">
+          <div class="stat">
+            <div class="stat-num" id="serviceCount">0</div>
+            <div class="stat-label">Services Listed</div>
+          </div>
+        </div>
+        <div style="margin-top:12px;text-align:center">
+          <a id="profileLink" href="#" target="_blank" class="btn btn-ghost" style="font-size:12px;padding:8px 14px;display:inline-block;text-decoration:none">View Public Profile</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: edit forms -->
+    <div>
+
+      <!-- Profile Info -->
+      <div class="card">
+        <div class="card-title">Profile Information</div>
+        <div class="alert alert-success" id="profileSuccess"></div>
+        <div class="alert alert-error" id="profileError"></div>
+        <div class="field">
+          <label>Full Name</label>
+          <input type="text" id="fieldName" placeholder="Your name"/>
+        </div>
+        <div class="field">
+          <label>Bio</label>
+          <textarea id="fieldBio" rows="4" placeholder="Tell clients about yourself, your experience, and your approach..."></textarea>
+        </div>
+        <div class="field">
+          <label>Profile Photo URL</label>
+          <div class="photo-input-wrap">
+            <input type="url" id="fieldPhoto" placeholder="https://..."/>
+          </div>
+          <div class="url-preview">Paste a direct image URL. Use a service like <a href="https://imgur.com" target="_blank">Imgur</a> to host your photo.</div>
+        </div>
+        <div class="field">
+          <label>Modality</label>
+          <select id="fieldModality">
+            <option value="">Select...</option>
+            <option>Personal Training</option>
+            <option>Massage Therapy</option>
+            <option>Yoga / Pilates</option>
+            <option>Nutrition</option>
+            <option>Acupuncture</option>
+            <option>Sound Healing</option>
+            <option>Therapy</option>
+            <option>Intuitive / Energy</option>
+            <option>Peptides / Wellness</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Location</label>
+          <input type="text" id="fieldLocation" placeholder="City, State"/>
+        </div>
+        <button class="btn btn-primary" onclick="saveProfile()" id="saveProfileBtn">Save Profile</button>
+      </div>
+
+      <!-- Services -->
+      <div class="card">
+        <div class="card-title">Your Services</div>
+        <div class="alert alert-success" id="servicesSuccess"></div>
+        <div id="servicesList" class="services-list">
+          <div style="font-size:14px;color:#6b7280;text-align:center;padding:20px">No services yet. Add one below.</div>
+        </div>
+        <button class="btn btn-ghost" onclick="toggleAddService()" style="margin-top:14px;width:100%" id="addServiceToggle">+ Add Service</button>
+        <div class="add-service-form" id="addServiceForm">
+          <div class="field">
+            <label>Service Name</label>
+            <input type="text" id="newServiceName" placeholder="e.g. 1-on-1 Training Session"/>
+          </div>
+          <div class="service-row">
+            <div class="field" style="margin:0">
+              <label>Price ($)</label>
+              <input type="number" id="newServicePrice" placeholder="150"/>
+            </div>
+            <div class="field" style="margin:0">
+              <label>Duration (min)</label>
+              <input type="number" id="newServiceDuration" placeholder="60"/>
+            </div>
+            <div></div>
+          </div>
+          <div class="field" style="margin-top:12px">
+            <label>Description (optional)</label>
+            <input type="text" id="newServiceDesc" placeholder="Brief description of this service"/>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:4px">
+            <button class="btn btn-primary" onclick="addService()">Add Service</button>
+            <button class="btn btn-ghost" onclick="toggleAddService()">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Change Password -->
+      <div class="card">
+        <div class="card-title">Change Password</div>
+        <div class="alert alert-success" id="pwSuccess"></div>
+        <div class="alert alert-error" id="pwError"></div>
+        <div class="field">
+          <label>Current Password</label>
+          <input type="password" id="currentPw" placeholder="Your current password"/>
+        </div>
+        <div class="field">
+          <label>New Password</label>
+          <input type="password" id="newPw" placeholder="8+ characters"/>
+        </div>
+        <button class="btn btn-ghost" onclick="changePassword()">Update Password</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+let profile = null;
+let services = [];
+
+async function loadProfile() {
+  try {
+    const res = await fetch('/api/provider/me');
+    if (res.status === 401) { window.location.href = '/provider-login'; return; }
+    const data = await res.json();
+    if (data.error) { window.location.href = '/provider-login'; return; }
+    profile = data;
+    services = Array.isArray(data.services) ? data.services : [];
+    renderProfile();
+    renderServices();
+  } catch(e) {
+    window.location.href = '/provider-login';
+  }
+}
+
+function renderProfile() {
+  const p = profile;
+  document.getElementById('welcomeName').textContent = `Welcome back, ${p.name || 'Provider'}`;
+  document.getElementById('sidebarName').textContent = p.name || '';
+  document.getElementById('sidebarModality').textContent = p.modality || '';
+  document.getElementById('sidebarLocation').textContent = p.location || '';
+  document.getElementById('avatarInitial').textContent = (p.name || '?')[0].toUpperCase();
+  if (p.photo_url) {
+    document.getElementById('avatarEl').innerHTML = `<img src="${p.photo_url}" onerror="this.style.display='none'"/>`;
+  }
+  const approved = p.approved;
+  const badge = document.getElementById('approvalBadge');
+  const pill = document.getElementById('statusPill');
+  if (approved) {
+    badge.textContent = 'Active';
+    badge.style.background = '#f0fdf4'; badge.style.color = '#15803d'; badge.style.borderColor = '#bbf7d0';
+    pill.textContent = 'Approved - Live';
+    pill.className = 'status-pill status-approved';
+  } else {
+    badge.textContent = 'Pending Approval';
+    pill.textContent = 'Pending Admin Approval';
+    pill.className = 'status-pill status-pending';
+  }
+  document.getElementById('profileLink').href = `/provider/${p.slug}`;
+  document.getElementById('fieldName').value = p.name || '';
+  document.getElementById('fieldBio').value = p.bio || '';
+  document.getElementById('fieldPhoto').value = p.photo_url || '';
+  document.getElementById('fieldModality').value = p.modality || '';
+  document.getElementById('fieldLocation').value = p.location || '';
+}
+
+function renderServices() {
+  document.getElementById('serviceCount').textContent = services.length;
+  const el = document.getElementById('servicesList');
+  if (!services.length) {
+    el.innerHTML = '<div style="font-size:14px;color:#6b7280;text-align:center;padding:20px">No services yet. Add one below.</div>';
+    return;
+  }
+  el.innerHTML = services.map((s, i) => `
+    <div class="service-item">
+      <div style="flex:1">
+        <div class="service-name">${s.name}</div>
+        <div class="service-duration">${s.duration ? s.duration + ' min' : ''} ${s.description ? '- ' + s.description : ''}</div>
+      </div>
+      <div class="service-price">$${s.price}</div>
+      <button class="btn-icon" onclick="removeService(${i})" title="Remove">✕</button>
+    </div>`).join('');
+}
+
+async function saveProfile() {
+  const btn = document.getElementById('saveProfileBtn');
+  const sucEl = document.getElementById('profileSuccess');
+  const errEl = document.getElementById('profileError');
+  sucEl.classList.remove('show'); errEl.classList.remove('show');
+  btn.disabled = true; btn.textContent = 'Saving...';
+  try {
+    const res = await fetch('/api/provider/me', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        name: document.getElementById('fieldName').value.trim(),
+        bio: document.getElementById('fieldBio').value.trim(),
+        photo_url: document.getElementById('fieldPhoto').value.trim(),
+        modality: document.getElementById('fieldModality').value,
+        location: document.getElementById('fieldLocation').value.trim(),
+        services,
+      })
+    });
+    const data = await res.json();
+    if (data.success) {
+      sucEl.textContent = 'Profile saved successfully.';
+      sucEl.classList.add('show');
+      await loadProfile();
+    } else {
+      errEl.textContent = data.error || 'Failed to save';
+      errEl.classList.add('show');
+    }
+  } catch(e) {
+    errEl.textContent = 'Something went wrong';
+    errEl.classList.add('show');
+  }
+  btn.disabled = false; btn.textContent = 'Save Profile';
+  setTimeout(() => sucEl.classList.remove('show'), 3000);
+}
+
+function toggleAddService() {
+  const form = document.getElementById('addServiceForm');
+  form.classList.toggle('open');
+  if (!form.classList.contains('open')) {
+    document.getElementById('newServiceName').value = '';
+    document.getElementById('newServicePrice').value = '';
+    document.getElementById('newServiceDuration').value = '';
+    document.getElementById('newServiceDesc').value = '';
+  }
+}
+
+async function addService() {
+  const name = document.getElementById('newServiceName').value.trim();
+  const price = parseFloat(document.getElementById('newServicePrice').value);
+  const duration = parseInt(document.getElementById('newServiceDuration').value) || null;
+  const description = document.getElementById('newServiceDesc').value.trim();
+  if (!name || !price) { alert('Service name and price required'); return; }
+  services.push({ name, price, duration, description });
+  renderServices();
+  // Save immediately
+  await fetch('/api/provider/me', {
+    method:'PUT', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ services })
+  });
+  const sucEl = document.getElementById('servicesSuccess');
+  sucEl.textContent = 'Service added and saved.';
+  sucEl.classList.add('show');
+  setTimeout(() => sucEl.classList.remove('show'), 2000);
+  toggleAddService();
+}
+
+async function removeService(index) {
+  if (!confirm('Remove this service?')) return;
+  services.splice(index, 1);
+  renderServices();
+  await fetch('/api/provider/me', {
+    method:'PUT', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ services })
+  });
+}
+
+async function changePassword() {
+  const current = document.getElementById('currentPw').value;
+  const newPw = document.getElementById('newPw').value;
+  const sucEl = document.getElementById('pwSuccess');
+  const errEl = document.getElementById('pwError');
+  sucEl.classList.remove('show'); errEl.classList.remove('show');
+  if (!current || !newPw || newPw.length < 8) { errEl.textContent = 'Both passwords required. New must be 8+ chars.'; errEl.classList.add('show'); return; }
+  try {
+    const res = await fetch('/api/provider/password', { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify({current_password:current, new_password:newPw}) });
+    const data = await res.json();
+    if (data.success) {
+      sucEl.textContent = 'Password updated.';
+      sucEl.classList.add('show');
+      document.getElementById('currentPw').value = '';
+      document.getElementById('newPw').value = '';
+      setTimeout(() => sucEl.classList.remove('show'), 3000);
+    } else {
+      errEl.textContent = data.error || 'Failed to update password';
+      errEl.classList.add('show');
+    }
+  } catch(e) {
+    errEl.textContent = 'Something went wrong';
+    errEl.classList.add('show');
+  }
+}
+
+loadProfile();
+</script>
+</body>
+</html>
