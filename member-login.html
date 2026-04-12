@@ -60,7 +60,22 @@ input:focus{border-color:#f07d3a;background:#fff}
       <label>Password</label>
       <input type="password" id="loginPassword" placeholder="Your password"/>
     </div>
+    <div style="text-align:right;margin-top:4px;margin-bottom:8px"><a href="#" onclick="showForgot(event)" style="font-size:12px;color:#6b7280;text-decoration:none">Forgot password?</a></div>
     <button class="btn" onclick="doLogin()" id="loginBtn">Sign In</button>
+  </div>
+
+  <!-- FORGOT PASSWORD -->
+  <div class="form-section" id="forgotSection">
+    <h2>Reset password</h2>
+    <p class="sub">Enter your email and we'll send a reset link.</p>
+    <div class="alert alert-error" id="forgotError"></div>
+    <div class="alert alert-success" id="forgotSuccess"></div>
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="forgotEmail" placeholder="you@example.com"/>
+    </div>
+    <button class="btn" onclick="doForgot()" id="forgotBtn">Send Reset Link</button>
+    <div style="text-align:center;margin-top:16px"><a href="#" onclick="switchTab('login');return false" style="font-size:13px;color:#6b7280;text-decoration:none">← Back to login</a></div>
   </div>
 
   <!-- SIGNUP -->
@@ -97,6 +112,36 @@ function switchTab(tab) {
   document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', (i===0&&tab==='login')||(i===1&&tab==='signup')));
   document.getElementById('loginSection').classList.toggle('active', tab==='login');
   document.getElementById('signupSection').classList.toggle('active', tab==='signup');
+  document.getElementById('forgotSection').classList.remove('active');
+}
+
+function showForgot(e) {
+  e.preventDefault();
+  document.getElementById('loginSection').classList.remove('active');
+  document.getElementById('signupSection').classList.remove('active');
+  document.getElementById('forgotSection').classList.add('active');
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+}
+
+async function doForgot() {
+  const email = document.getElementById('forgotEmail').value.trim();
+  const errEl = document.getElementById('forgotError');
+  const sucEl = document.getElementById('forgotSuccess');
+  const btn = document.getElementById('forgotBtn');
+  errEl.classList.remove('show'); sucEl.classList.remove('show');
+  if (!email) { errEl.textContent = 'Email required'; errEl.classList.add('show'); return; }
+  btn.disabled = true; btn.textContent = 'Sending...';
+  try {
+    await fetch('/api/member/forgot-password', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email}) });
+    sucEl.textContent = "If that email is registered, you'll receive a reset link shortly.";
+    sucEl.classList.add('show');
+    document.getElementById('forgotEmail').style.display = 'none';
+    btn.style.display = 'none';
+  } catch(e) {
+    errEl.textContent = 'Something went wrong. Please try again.';
+    errEl.classList.add('show');
+    btn.disabled = false; btn.textContent = 'Send Reset Link';
+  }
 }
 
 async function doLogin() {

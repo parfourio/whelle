@@ -27,6 +27,13 @@ header{background:#fff;border-bottom:1px solid #e5e7eb;padding:0 32px;height:60p
 label{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
 input{width:100%;background:#f9fafb;border:1.5px solid #e5e7eb;color:#1a202c;font-family:'Inter',sans-serif;font-size:14px;padding:10px 14px;border-radius:9px;outline:none;transition:border-color .15s}
 input:focus{border-color:#f07d3a;background:#fff}
+.photo-upload-area{display:flex;align-items:center;gap:16px;padding:16px;background:#f9fafb;border:1.5px dashed #e5e7eb;border-radius:9px;cursor:pointer;transition:all .15s}
+.photo-upload-area:hover{border-color:#f07d3a;background:#fff8f5}
+.photo-preview{width:60px;height:60px;border-radius:50%;background:#fed7aa;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:#f07d3a;overflow:hidden;flex-shrink:0}
+.photo-preview img{width:100%;height:100%;object-fit:cover}
+.photo-upload-text{font-size:13px;color:#6b7280}
+.photo-upload-text strong{display:block;color:#374151;font-size:14px;margin-bottom:2px}
+.photo-upload-text span{font-size:11px;color:#9ca3af}
 .btn{padding:11px 20px;border-radius:9px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;border:none}
 .btn-primary{background:#f07d3a;color:#fff}
 .btn-primary:hover{background:#d96a2a}
@@ -104,15 +111,24 @@ input:focus{border-color:#f07d3a;background:#fff}
       <div class="alert alert-error" id="profileError"></div>
       <div class="field">
         <label>Full Name</label>
-        <input type="text" id="fieldName" placeholder="Your name"/>
+        <input type="text" id="fieldName" placeholder="Your name" autocomplete="off"/>
       </div>
       <div class="field">
-        <label>Photo URL (optional)</label>
-        <input type="url" id="fieldPhoto" placeholder="https://..."/>
+        <label>Profile Photo</label>
+        <div class="photo-upload-area" onclick="document.getElementById('photoFileInput').click()">
+          <div class="photo-preview" id="uploadPreview"><span id="uploadInitial">?</span></div>
+          <div class="photo-upload-text">
+            <strong>Upload a photo</strong>
+            Click to choose from your device
+            <span>JPG, PNG or GIF · Max 5MB</span>
+          </div>
+        </div>
+        <input type="file" id="photoFileInput" accept="image/*" style="display:none" onchange="handlePhotoSelect(this)"/>
+        <canvas id="resizeCanvas" style="display:none"></canvas>
       </div>
       <div class="field">
         <label>Location (optional)</label>
-        <input type="text" id="fieldLocation" placeholder="City, State"/>
+        <input type="text" id="fieldLocation" placeholder="City, State" autocomplete="off"/>
       </div>
       <button class="btn btn-primary" onclick="saveProfile()">Save Changes</button>
     </div>
@@ -124,6 +140,7 @@ input:focus{border-color:#f07d3a;background:#fff}
 let allProviders = [];
 let activeFilter = '';
 let memberData = null;
+let newPhotoBase64 = null; // holds newly selected photo, null = no change
 
 function switchTab(tab) {
   document.querySelectorAll('.tab').forEach((t,i) => {
@@ -131,6 +148,35 @@ function switchTab(tab) {
   });
   document.getElementById('browseSection').classList.toggle('active', tab==='browse');
   document.getElementById('profileSection').classList.toggle('active', tab==='profile');
+}
+
+function handlePhotoSelect(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) {
+    alert('Please choose an image under 5MB.');
+    input.value = ''; return;
+  }
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.getElementById('resizeCanvas');
+      const MAX = 256;
+      let w = img.width, h = img.height;
+      if (w > h) { if (w > MAX) { h = h * MAX / w; w = MAX; } }
+      else { if (h > MAX) { w = w * MAX / h; h = MAX; } }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      newPhotoBase64 = canvas.toDataURL('image/jpeg', 0.82);
+      // Show preview in upload area
+      document.getElementById('uploadPreview').innerHTML = `<img src="${newPhotoBase64}"/>`;
+      // Also update the sidebar avatar
+      document.getElementById('memberAvatar').innerHTML = `<img src="${newPhotoBase64}"/>`;
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
 }
 
 async function loadMember() {
@@ -142,12 +188,14 @@ async function loadMember() {
     document.getElementById('memberName').textContent = memberData.name;
     document.getElementById('memberEmail').textContent = memberData.email;
     document.getElementById('memberLocation').textContent = memberData.location || '';
-    document.getElementById('memberInitial').textContent = (memberData.name || '?')[0].toUpperCase();
+    const initial = (memberData.name || '?')[0].toUpperCase();
+    document.getElementById('memberInitial').textContent = initial;
+    document.getElementById('uploadInitial').textContent = initial;
     if (memberData.photo_url) {
       document.getElementById('memberAvatar').innerHTML = `<img src="${memberData.photo_url}" onerror="this.style.display='none'"/>`;
+      document.getElementById('uploadPreview').innerHTML = `<img src="${memberData.photo_url}" onerror="this.parentElement.innerHTML='<span>${initial}</span>'"/>`;
     }
     document.getElementById('fieldName').value = memberData.name || '';
-    document.getElementById('fieldPhoto').value = memberData.photo_url || '';
     document.getElementById('fieldLocation').value = memberData.location || '';
   } catch(e) {
     window.location.href = '/member-login';
@@ -196,18 +244,20 @@ async function saveProfile() {
   const errEl = document.getElementById('profileError');
   sucEl.classList.remove('show'); errEl.classList.remove('show');
   try {
+    const payload = {
+      name: document.getElementById('fieldName').value.trim(),
+      location: document.getElementById('fieldLocation').value.trim(),
+    };
+    if (newPhotoBase64) payload.photo_url = newPhotoBase64;
     const res = await fetch('/api/member/me', {
       method:'PUT', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        name: document.getElementById('fieldName').value.trim(),
-        photo_url: document.getElementById('fieldPhoto').value.trim(),
-        location: document.getElementById('fieldLocation').value.trim(),
-      })
+      body: JSON.stringify(payload)
     });
     const data = await res.json();
     if (data.success) {
       sucEl.textContent = 'Profile saved.';
       sucEl.classList.add('show');
+      newPhotoBase64 = null; // clear pending photo
       await loadMember();
       setTimeout(() => sucEl.classList.remove('show'), 3000);
     } else {

@@ -395,16 +395,187 @@ async function handlePublicProvider(req, res, slug) {
   }
 }
 
+// ── EMAIL via Resend ──────────────────────────────────────────
+async function sendEmail(to, subject, html) {
+  return new Promise((resolve) => {
+    const key = process.env.RESEND_API_KEY;
+    if (!key) { resolve({ ok: false, error: 'No RESEND_API_KEY set' }); return; }
+    const from = process.env.RESEND_FROM_EMAIL || 'noreply@whelle.com';
+    const body = JSON.stringify({ from, to: [to], subject, html });
+    const req = https.request({
+      hostname: 'api.resend.com',
+      path: '/emails',
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${key}`,
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(body),
+      }
+    }, r => {
+      let d = '';
+      r.on('data', c => d += c);
+      r.on('end', () => resolve({ ok: r.statusCode >= 200 && r.statusCode < 300, status: r.statusCode, body: d }));
+    });
+    req.on('error', e => resolve({ ok: false, error: e.message }));
+    req.write(body);
+    req.end();
+  });
+}
+
+// ── FORGOT PASSWORD — PROVIDER ────────────────────────────────
+async function handleForgotPasswordProvider(req, res, parseBody) {
+  try {
+    const body = await parseBody(req);
+    const { email } = body;
+    if (!email) { res.writeHead(400,{'Content-Type':'application/json'}); res.end(JSON.stringify({error:'Email required'})); return; }
+    res.writeHead(200,{'Content-Type':'application/json'});
+    res.end(JSON.stringify({success:true}));
+
+    const result = await supabase('GET', `providers?email=eq.${encodeURIComponent(email)}&select=id,email,name&active=eq.true`);
+    if (!Array.isArray(result.data) || result.data.length === 0) return;
+
+    const provider = result.data[0];
+    const token = crypto.randomBytes(32).toString('hex');
+    const expires_at = new Date(Date.now() + 60 * 60 * 1000).toISOString();
+
+    await supabase('DELETE', `password_reset_tokens?email=eq.${encodeURIComponent(email)}&user_type=eq.provider`);
+    await supabase('POST', 'password_reset_tokens', { email, token, expires_at, user_type: 'provider' });
+
+    const baseUrl = process.env.APP_URL || 'https://whelle.com';
+    const resetLink = `${baseUrl}/reset-password?token=${token}&type=provider`;
+    const name = provider.name || 'there';
+
+    await sendEmail(email, 'Reset your Whelle password', `
+      <div style="font-family:sans-serif;max-width:520px;margin:40px auto;background:#f8fafc;border-radius:12px;padding:40px;border:1px solid #e2e8f0">
+        <h2 style="color:#2a7ab5;margin:0 0 8px">Whelle Password Reset</h2>
+        <p style="color:#64748b;margin:0 0 24px;font-size:13px">Provider Account</p>
+        <p style="margin:0 0 20px;color:#1e293b">Hi ${name},</p>
+        <p style="margin:0 0 24px;color:#475569">We received a request to reset your Whelle provider account password. Click the button below — this link expires in 1 hour.</p>
+        <a href="${resetLink}" style="display:inline-block;background:#2a7ab5;color:#fff;text-decoration:none;padding:13px 28px;border-radius:8px;font-weight:600;margin-bottom:24px">Reset Password →</a>
+        <p style="color:#94a3b8;font-size:12px;margin:0">If you didn't request this, you can safely ignore this email.</p>
+      </div>
+    `);
+  } catch(e) { console.error('forgotPasswordProvider error:', e); }
+}
+
+// ── RESET PASSWORD WITH TOKEN — PROVIDER ──────────────────────
+async function handleResetPasswordProvider(req, res, parseBody) {
+  try {
+    const body = await parseBody(req);
+    const { token, new_password } = body;
+    if (!token || !new_password || new_password.length < 8) {
+      res.writeHead(400,{'Content-Type':'application/json'});
+      res.end(JSON.stringify({error:'Valid token and password (8+ chars) required'}));
+      return;
+    }
+    const result = await supabase('GET', `password_reset_tokens?token=eq.${token}&user_type=eq.provider&select=email,expires_at`);
+    if (!Array.isArray(result.data) || result.data.length === 0) {
+      res.writeHead(400,{'Content-Type':'application/json'});
+      res.end(JSON.stringify({error:'Invalid or expired reset link'}));
+      return;
+    }
+    const record = result.data[0];
+    if (new Date(record.expires_at) < new Date()) {
+      await supabase('DELETE', `password_reset_tokens?token=eq.${token}`);
+      res.writeHead(400,{'Content-Type':'application/json'});
+      res.end(JSON.stringify({error:'Reset link has expired. Please request a new one.'}));
+      return;
+    }
+    await supabase('PATCH', `providers?email=eq.${encodeURIComponent(record.email)}`, { password_hash: hashPassword(new_password) });
+    await supabase('DELETE', `password_reset_tokens?token=eq.${token}`);
+    res.writeHead(200,{'Content-Type':'application/json'});
+    res.end(JSON.stringify({success:true}));
+  } catch(e) {
+    console.error('resetPasswordProvider error:', e);
+    res.writeHead(500,{'Content-Type':'application/json'});
+    res.end(JSON.stringify({error:'Server error'}));
+  }
+}
+
+// ── FORGOT PASSWORD — MEMBER ──────────────────────────────────
+async function handleForgotPasswordMember(req, res, parseBody) {
+  try {
+    const body = await parseBody(req);
+    const { email } = body;
+    if (!email) { res.writeHead(400,{'Content-Type':'application/json'}); res.end(JSON.stringify({error:'Email required'})); return; }
+    res.writeHead(200,{'Content-Type':'application/json'});
+    res.end(JSON.stringify({success:true}));
+
+    const result = await supabase('GET', `members?email=eq.${encodeURIComponent(email)}&select=id,email,name&active=eq.true`);
+    if (!Array.isArray(result.data) || result.data.length === 0) return;
+
+    const member = result.data[0];
+    const token = crypto.randomBytes(32).toString('hex');
+    const expires_at = new Date(Date.now() + 60 * 60 * 1000).toISOString();
+
+    await supabase('DELETE', `password_reset_tokens?email=eq.${encodeURIComponent(email)}&user_type=eq.member`);
+    await supabase('POST', 'password_reset_tokens', { email, token, expires_at, user_type: 'member' });
+
+    const baseUrl = process.env.APP_URL || 'https://whelle.com';
+    const resetLink = `${baseUrl}/reset-password?token=${token}&type=member`;
+    const name = member.name || 'there';
+
+    await sendEmail(email, 'Reset your Whelle password', `
+      <div style="font-family:sans-serif;max-width:520px;margin:40px auto;background:#f8fafc;border-radius:12px;padding:40px;border:1px solid #e2e8f0">
+        <h2 style="color:#f07d3a;margin:0 0 8px">Whelle Password Reset</h2>
+        <p style="color:#64748b;margin:0 0 24px;font-size:13px">Member Account</p>
+        <p style="margin:0 0 20px;color:#1e293b">Hi ${name},</p>
+        <p style="margin:0 0 24px;color:#475569">We received a request to reset your Whelle member account password. Click the button below — this link expires in 1 hour.</p>
+        <a href="${resetLink}" style="display:inline-block;background:#f07d3a;color:#fff;text-decoration:none;padding:13px 28px;border-radius:8px;font-weight:600;margin-bottom:24px">Reset Password →</a>
+        <p style="color:#94a3b8;font-size:12px;margin:0">If you didn't request this, you can safely ignore this email.</p>
+      </div>
+    `);
+  } catch(e) { console.error('forgotPasswordMember error:', e); }
+}
+
+// ── RESET PASSWORD WITH TOKEN — MEMBER ───────────────────────
+async function handleResetPasswordMember(req, res, parseBody) {
+  try {
+    const body = await parseBody(req);
+    const { token, new_password } = body;
+    if (!token || !new_password || new_password.length < 8) {
+      res.writeHead(400,{'Content-Type':'application/json'});
+      res.end(JSON.stringify({error:'Valid token and password (8+ chars) required'}));
+      return;
+    }
+    const result = await supabase('GET', `password_reset_tokens?token=eq.${token}&user_type=eq.member&select=email,expires_at`);
+    if (!Array.isArray(result.data) || result.data.length === 0) {
+      res.writeHead(400,{'Content-Type':'application/json'});
+      res.end(JSON.stringify({error:'Invalid or expired reset link'}));
+      return;
+    }
+    const record = result.data[0];
+    if (new Date(record.expires_at) < new Date()) {
+      await supabase('DELETE', `password_reset_tokens?token=eq.${token}`);
+      res.writeHead(400,{'Content-Type':'application/json'});
+      res.end(JSON.stringify({error:'Reset link has expired. Please request a new one.'}));
+      return;
+    }
+    await supabase('PATCH', `members?email=eq.${encodeURIComponent(record.email)}`, { password_hash: hashPassword(new_password) });
+    await supabase('DELETE', `password_reset_tokens?token=eq.${token}`);
+    res.writeHead(200,{'Content-Type':'application/json'});
+    res.end(JSON.stringify({success:true}));
+  } catch(e) {
+    console.error('resetPasswordMember error:', e);
+    res.writeHead(500,{'Content-Type':'application/json'});
+    res.end(JSON.stringify({error:'Server error'}));
+  }
+}
+
 module.exports = {
   handleProviderSignup,
   handleProviderLogin,
   handleGetProvider,
   handleUpdateProvider,
   handleProviderChangePassword,
+  handleForgotPasswordProvider,
+  handleResetPasswordProvider,
   handleMemberSignup,
   handleMemberLogin,
   handleGetMember,
   handleUpdateMember,
+  handleForgotPasswordMember,
+  handleResetPasswordMember,
   handleAdminGetProviders,
   handleAdminGetMembers,
   handleAdminUpdateProvider,

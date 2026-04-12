@@ -132,6 +132,7 @@ const server = http.createServer(async (req, res) => {
   if (url === '/' || url === '/index.html') { serveFile(res, path.join(__dirname, 'index.html')); return; }
   if (url === '/provider-login' || url === '/provider-login.html') { serveFile(res, path.join(__dirname, 'provider-login.html')); return; }
   if (url === '/member-login' || url === '/member-login.html') { serveFile(res, path.join(__dirname, 'member-login.html')); return; }
+  if (url === '/reset-password' || url === '/reset-password.html') { serveFile(res, path.join(__dirname, 'reset-password.html')); return; }
 
   // ── Protected: provider dashboard ─────────────────────────
   if (url === '/provider-dashboard' || url === '/provider-dashboard.html') {
@@ -182,6 +183,12 @@ const server = http.createServer(async (req, res) => {
     if (!session || session.role !== 'provider') { res.writeHead(401, {'Content-Type':'application/json'}); res.end(JSON.stringify({error:'Unauthorized'})); return; }
     await auth.handleProviderChangePassword(req, res, session, parseBody); return;
   }
+  if (url === '/api/provider/forgot-password' && req.method === 'POST') {
+    await auth.handleForgotPasswordProvider(req, res, parseBody); return;
+  }
+  if (url === '/api/provider/reset-password' && req.method === 'POST') {
+    await auth.handleResetPasswordProvider(req, res, parseBody); return;
+  }
 
   // ── MEMBER API ─────────────────────────────────────────────
   if (url === '/api/member/signup' && req.method === 'POST') {
@@ -197,6 +204,12 @@ const server = http.createServer(async (req, res) => {
   if (url === '/api/member/me' && req.method === 'PUT') {
     if (!session || session.role !== 'member') { res.writeHead(401, {'Content-Type':'application/json'}); res.end(JSON.stringify({error:'Unauthorized'})); return; }
     await auth.handleUpdateMember(req, res, session, parseBody); return;
+  }
+  if (url === '/api/member/forgot-password' && req.method === 'POST') {
+    await auth.handleForgotPasswordMember(req, res, parseBody); return;
+  }
+  if (url === '/api/member/reset-password' && req.method === 'POST') {
+    await auth.handleResetPasswordMember(req, res, parseBody); return;
   }
 
   // ── ADMIN API ──────────────────────────────────────────────
