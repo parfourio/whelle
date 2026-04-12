@@ -3,121 +3,222 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>The Intuitive Rose · Tiffany Schultz</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌹</text></svg>"/>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<title>Whelle · Wellness Marketplace</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌀</text></svg>"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
 :root{
-  --cream:#fdf8f3;--blush:#f5e8e0;--rose:#c47e8a;--rose-dark:#9e5a66;--rose-pale:#f9eff2;
-  --mauve:#8b6370;--gold:#c9a96e;--text:#2c1f25;--text2:#5a4048;--muted:#9a7a84;
-  --border:#e8d5d9;--border2:#d4b8be;--white:#ffffff;
-  --shadow:0 4px 24px rgba(44,31,37,.08);--shadow-lg:0 12px 48px rgba(44,31,37,.12);
-  --radius:16px;--radius-sm:10px;
+  --navy:#0d1f3c;
+  --navy2:#152a4e;
+  --navy3:#1e3a6e;
+  --orange:#f4622a;
+  --orange2:#ff7a45;
+  --orange-pale:#fff3ee;
+  --orange-light:#fde8df;
+  --cream:#fafaf7;
+  --white:#ffffff;
+  --text:#0d1f3c;
+  --text2:#2d4066;
+  --muted:#6b7fa3;
+  --border:#e2e8f5;
+  --border2:#c8d4ea;
+  --shadow:0 4px 24px rgba(13,31,60,.08);
+  --shadow-lg:0 12px 48px rgba(13,31,60,.14);
+  --radius:14px;
+  --radius-sm:8px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--cream);color:var(--text);font-family:'Jost',sans-serif;font-size:15px;line-height:1.7;overflow-x:hidden}
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;transition:all .3s}
-nav.scrolled{background:rgba(253,248,243,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);box-shadow:0 1px 12px rgba(44,31,37,.06)}
-.logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:500;color:var(--text);text-decoration:none;letter-spacing:.02em}
-.logo span{color:var(--rose);font-style:italic}
+body{background:var(--cream);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.7;overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;padding:0 40px;display:flex;align-items:center;justify-content:space-between;transition:all .3s}
+nav.scrolled{background:rgba(13,31,60,.97);backdrop-filter:blur(12px);box-shadow:0 1px 0 rgba(255,255,255,.08)}
+.logo{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:white;text-decoration:none;letter-spacing:-.5px}
+.logo span{color:var(--orange)}
 .nav-links{display:flex;align-items:center;gap:6px;list-style:none}
-.nav-links a{color:var(--text2);text-decoration:none;font-size:13px;font-weight:400;letter-spacing:.04em;padding:7px 14px;border-radius:100px;transition:all .2s}
-.nav-links a:hover{background:var(--rose-pale);color:var(--rose-dark)}
-.nav-cta{background:var(--rose)!important;color:white!important;font-weight:500!important}
-.nav-cta:hover{background:var(--rose-dark)!important}
-.hero{min-height:100vh;display:flex;align-items:center;padding:100px 40px 80px;position:relative;overflow:hidden;background:var(--white)}
-.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 70% at 100% 0%,rgba(196,126,138,.08) 0%,transparent 60%),radial-gradient(ellipse 60% 50% at 0% 100%,rgba(201,169,110,.06) 0%,transparent 50%)}
-.hero-inner{max-width:1100px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 380px;gap:80px;align-items:center;position:relative}
-.hero-tag{display:inline-flex;align-items:center;gap:8px;background:var(--rose-pale);color:var(--rose-dark);font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:6px 14px;border-radius:100px;margin-bottom:20px;border:1px solid rgba(196,126,138,.2)}
-h1{font-family:'Cormorant Garamond',serif;font-size:clamp(44px,5vw,68px);font-weight:400;line-height:1.05;color:var(--text);margin-bottom:20px;letter-spacing:-.3px}
-h1 em{font-style:italic;color:var(--rose)}
-.hero-sub{font-size:16px;color:var(--text2);line-height:1.8;margin-bottom:32px;max-width:480px;font-weight:300}
+.nav-links a{color:rgba(255,255,255,.7);text-decoration:none;font-size:13px;font-weight:500;padding:7px 14px;border-radius:100px;transition:all .2s;letter-spacing:.02em}
+.nav-links a:hover{color:white;background:rgba(255,255,255,.1)}
+.nav-btn{background:var(--orange)!important;color:white!important;font-weight:600!important}
+.nav-btn:hover{background:var(--orange2)!important}
+
+/* HERO */
+.hero{min-height:100vh;background:var(--navy);display:flex;align-items:center;padding:100px 40px 80px;position:relative;overflow:hidden}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.hero-glow{position:absolute;top:-200px;right:-100px;width:600px;height:600px;background:radial-gradient(circle,rgba(244,98,42,.15) 0%,transparent 70%);pointer-events:none}
+.hero-glow2{position:absolute;bottom:-100px;left:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(30,58,110,.8) 0%,transparent 70%);pointer-events:none}
+.hero-inner{max-width:1100px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 440px;gap:80px;align-items:center;position:relative}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(244,98,42,.15);color:var(--orange2);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:6px 14px;border-radius:100px;margin-bottom:20px;border:1px solid rgba(244,98,42,.25)}
+.hero-tag::before{content:'';width:6px;height:6px;background:var(--orange);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+h1{font-family:'Syne',sans-serif;font-size:clamp(44px,5.5vw,72px);font-weight:800;color:white;line-height:1;letter-spacing:-2px;margin-bottom:20px}
+h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:17px;color:rgba(255,255,255,.6);line-height:1.8;margin-bottom:32px;max-width:480px;font-weight:300}
 .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:40px}
-.btn-primary{background:var(--rose);color:white;padding:14px 28px;border-radius:100px;font-size:13px;font-weight:500;text-decoration:none;letter-spacing:.05em;transition:all .2s;box-shadow:0 4px 16px rgba(196,126,138,.3);display:inline-flex;align-items:center;gap:8px}
-.btn-primary:hover{background:var(--rose-dark);transform:translateY(-1px)}
-.btn-ghost{background:transparent;color:var(--text);padding:14px 24px;border-radius:100px;font-size:13px;font-weight:500;text-decoration:none;letter-spacing:.05em;border:1.5px solid var(--border2);transition:all .2s;display:inline-flex;align-items:center;gap:8px}
-.btn-ghost:hover{border-color:var(--rose);color:var(--rose)}
-.hero-trust{display:flex;align-items:center;gap:16px;font-size:13px;color:var(--muted)}
-.trust-divider{width:1px;height:14px;background:var(--border)}
-.photo-card{position:relative}
-.photo-wrap{border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-lg);background:var(--cream)}
-.photo-wrap img{width:100%;height:auto;display:block}
-.photo-accent{position:absolute;bottom:-16px;left:-16px;width:70px;height:70px;background:var(--rose-pale);border:2px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px}
-.photo-badge{position:absolute;top:20px;right:-16px;background:white;border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 16px;box-shadow:var(--shadow);text-align:center;min-width:120px}
-.badge-label{font-size:11px;color:var(--muted);letter-spacing:.05em;line-height:1.4}
-.about-section{background:var(--blush);padding:100px 40px;border-top:1px solid var(--border)}
-.about-inner{max-width:800px;margin:0 auto;text-align:center}
-.section-tag{display:inline-flex;align-items:center;gap:6px;background:white;color:var(--rose-dark);font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:5px 14px;border-radius:100px;margin-bottom:20px;border:1px solid var(--border)}
-h2{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,4vw,50px);font-weight:400;line-height:1.1;color:var(--text);margin-bottom:20px;letter-spacing:-.2px}
-h2 em{font-style:italic;color:var(--rose)}
-.about-text{font-size:16px;color:var(--text2);line-height:1.9;font-weight:300}
-.about-text p{margin-bottom:18px}
-.about-text p:last-child{margin-bottom:0}
-.services-section{padding:100px 40px;background:var(--white)}
-.services-inner{max-width:1100px;margin:0 auto}
-.services-header{text-align:center;margin-bottom:64px}
-.services-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-.service-card{background:var(--cream);border:1px solid var(--border);border-radius:var(--radius);padding:36px 32px;transition:all .25s;position:relative;overflow:hidden}
-.service-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--rose),var(--gold));transform:scaleX(0);transform-origin:left;transition:transform .3s}
-.service-card:hover::before{transform:scaleX(1)}
-.service-card:hover{background:white;box-shadow:var(--shadow);transform:translateY(-2px)}
-.service-icon{font-size:36px;margin-bottom:16px}
-.service-name{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:500;color:var(--text);margin-bottom:12px}
-.service-desc{font-size:14px;color:var(--text2);line-height:1.8;font-weight:300;margin-bottom:24px}
-.service-offerings{display:flex;flex-direction:column;gap:12px;margin-bottom:28px}
-.offering{background:white;border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.offering-name{font-size:13px;font-weight:500;color:var(--text)}
-.offering-price{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:500;color:var(--rose);white-space:nowrap}
-.offering-note{font-size:11px;color:var(--muted);margin-top:2px}
-.service-cta{display:inline-flex;align-items:center;gap:8px;background:var(--rose);color:white;padding:12px 22px;border-radius:100px;font-size:13px;font-weight:500;letter-spacing:.04em;text-decoration:none;transition:all .2s}
-.service-cta:hover{background:var(--rose-dark);transform:translateY(-1px)}
-.service-note{font-size:12px;color:var(--muted);margin-top:14px;font-style:italic;line-height:1.6}
-.testimonials-section{background:var(--blush);padding:100px 40px;border-top:1px solid var(--border)}
-.testimonials-inner{max-width:1100px;margin:0 auto}
-.testimonials-header{text-align:center;margin-bottom:64px}
-.testimonials-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-.testimonial-card{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:32px}
-.quote-mark{font-family:'Cormorant Garamond',serif;font-size:72px;color:var(--rose);opacity:.2;line-height:.8;margin-bottom:8px;font-style:italic}
-.testimonial-text{font-size:14px;color:var(--text2);line-height:1.9;font-weight:300;margin-bottom:20px;font-style:italic}
-.testimonial-author{font-size:13px;font-weight:500;color:var(--rose-dark);letter-spacing:.04em}
-.hearts{color:var(--rose);font-size:14px;margin-bottom:12px}
-.quote-section{background:var(--text);padding:80px 40px;text-align:center;position:relative;overflow:hidden}
-.quote-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(196,126,138,.08),transparent)}
-.quote-text{font-family:'Cormorant Garamond',serif;font-size:clamp(22px,3vw,34px);font-style:italic;color:rgba(255,255,255,.9);max-width:700px;margin:0 auto 16px;line-height:1.5;font-weight:300}
-.quote-text::before{content:'\201C';color:var(--rose);font-size:1.2em}
-.quote-text::after{content:'\201D';color:var(--rose);font-size:1.2em}
-.quote-author{font-size:12px;color:rgba(255,255,255,.4);letter-spacing:.12em;text-transform:uppercase;font-weight:500}
-.contact-section{padding:100px 40px;background:var(--white)}
-.contact-inner{max-width:600px;margin:0 auto;text-align:center}
-.contact-card{background:var(--cream);border:1px solid var(--border);border-radius:var(--radius);padding:40px;margin-top:40px;box-shadow:var(--shadow)}
-.contact-item{display:flex;align-items:center;justify-content:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--border);font-size:15px;color:var(--text2)}
-.contact-item:last-child{border-bottom:none}
-.contact-item a{color:var(--rose);text-decoration:none;font-weight:500}
-.contact-item a:hover{color:var(--rose-dark);text-decoration:underline}
-.contact-icon{font-size:18px}
-footer{background:var(--text);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
-.footer-logo{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:white;text-decoration:none}
-.footer-logo span{color:var(--rose);font-style:italic}
-.footer-copy{font-size:12px;color:rgba(255,255,255,.35)}
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+.btn-orange{background:var(--orange);color:white;padding:15px 28px;border-radius:100px;font-size:14px;font-weight:600;text-decoration:none;transition:all .2s;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(244,98,42,.35)}
+.btn-orange:hover{background:var(--orange2);transform:translateY(-2px);box-shadow:0 8px 28px rgba(244,98,42,.4)}
+.btn-ghost{background:rgba(255,255,255,.08);color:white;padding:15px 24px;border-radius:100px;font-size:14px;font-weight:500;text-decoration:none;transition:all .2s;display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.15)}
+.btn-ghost:hover{background:rgba(255,255,255,.15)}
+.hero-stats{display:flex;gap:32px}
+.stat-num{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:white;line-height:1}
+.stat-label{font-size:12px;color:rgba(255,255,255,.4);letter-spacing:.05em;margin-top:2px}
+
+/* SEARCH CARD */
+.search-card{background:white;border-radius:20px;padding:28px;box-shadow:0 24px 80px rgba(13,31,60,.3)}
+.search-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.search-input{width:100%;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:12px 16px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none;transition:border .2s;margin-bottom:12px}
+.search-input:focus{border-color:var(--orange)}
+.search-cats{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.cat-pill{padding:6px 12px;border-radius:100px;font-size:12px;font-weight:500;border:1.5px solid var(--border);color:var(--text2);cursor:pointer;transition:all .2s;background:white}
+.cat-pill:hover,.cat-pill.active{background:var(--orange);color:white;border-color:var(--orange)}
+.search-btn{width:100%;background:var(--navy);color:white;border:none;border-radius:var(--radius-sm);padding:14px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s}
+.search-btn:hover{background:var(--navy3)}
+.search-divider{text-align:center;font-size:12px;color:var(--muted);margin:12px 0;position:relative}
+.search-divider::before,.search-divider::after{content:'';position:absolute;top:50%;width:42%;height:1px;background:var(--border)}
+.search-divider::before{left:0}
+.search-divider::after{right:0}
+
+/* MODALITIES */
+.modalities{padding:80px 40px;background:white;border-bottom:1px solid var(--border)}
+.modalities-inner{max-width:1100px;margin:0 auto}
+.section-tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--orange);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px}
+h2{font-family:'Syne',sans-serif;font-size:clamp(28px,4vw,44px);font-weight:800;color:var(--text);letter-spacing:-1px;line-height:1.1;margin-bottom:8px}
+h2 em{font-style:normal;color:var(--orange)}
+.section-sub{font-size:16px;color:var(--muted);margin-bottom:48px;font-weight:300}
+.modality-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.modality-card{background:var(--cream);border:1.5px solid var(--border);border-radius:var(--radius);padding:20px 16px;text-align:center;cursor:pointer;transition:all .25s;text-decoration:none}
+.modality-card:hover{background:var(--orange-pale);border-color:var(--orange);transform:translateY(-2px)}
+.modality-icon{font-size:28px;margin-bottom:10px}
+.modality-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px}
+.modality-count{font-size:11px;color:var(--muted)}
+
+/* PRACTITIONERS */
+.practitioners{padding:80px 40px;background:var(--cream)}
+.practitioners-inner{max-width:1100px;margin:0 auto}
+.practitioners-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:40px;flex-wrap:wrap;gap:16px}
+.view-all{font-size:13px;font-weight:600;color:var(--orange);text-decoration:none}
+.prac-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.prac-card{background:white;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);transition:all .25s;text-decoration:none;display:block}
+.prac-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-3px)}
+.prac-img{height:200px;background:linear-gradient(135deg,var(--navy) 0%,var(--navy3) 100%);position:relative;display:flex;align-items:flex-end;padding:16px}
+.prac-img-placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:64px;opacity:.3}
+.prac-badge{background:var(--orange);color:white;font-size:10px;font-weight:700;padding:4px 10px;border-radius:100px;letter-spacing:.06em;text-transform:uppercase}
+.prac-body{padding:18px}
+.prac-name{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--text);margin-bottom:4px}
+.prac-title{font-size:13px;color:var(--muted);margin-bottom:12px}
+.prac-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.prac-tag{font-size:11px;font-weight:500;padding:3px 10px;border-radius:100px;background:var(--orange-pale);color:var(--orange);border:1px solid var(--orange-light)}
+.prac-footer{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--border)}
+.prac-rate{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text)}
+.prac-rate span{font-size:11px;font-weight:400;color:var(--muted);font-family:'DM Sans',sans-serif}
+.prac-rating{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--muted)}
+.prac-rating strong{color:var(--text)}
+
+/* PROFILE PAGE */
+.profile-section{padding:80px 40px;background:white}
+.profile-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 340px;gap:48px;align-items:start}
+.profile-left{}
+.profile-hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy3) 60%,var(--navy2) 100%);border-radius:var(--radius);height:280px;display:flex;align-items:flex-end;padding:24px;margin-bottom:24px;position:relative;overflow:hidden}
+.profile-hero-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:120px;opacity:.1}
+.profile-hero-content{position:relative;display:flex;align-items:flex-end;gap:20px}
+.profile-avatar{width:80px;height:80px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:white;border:3px solid white;flex-shrink:0}
+.profile-name{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:white;line-height:1.1;margin-bottom:4px}
+.profile-title-text{font-size:14px;color:rgba(255,255,255,.7)}
+.profile-verified{display:inline-flex;align-items:center;gap:4px;background:rgba(244,98,42,.2);color:var(--orange2);font-size:10px;font-weight:600;padding:3px 8px;border-radius:100px;border:1px solid rgba(244,98,42,.3);margin-top:6px}
+.profile-bio-section{margin-bottom:28px}
+.profile-section-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.profile-bio{font-size:15px;color:var(--text2);line-height:1.8;font-weight:300}
+.profile-vibe{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.vibe-tag{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);background:var(--cream);padding:5px 12px;border-radius:100px;border:1px solid var(--border)}
+.services-list{display:flex;flex-direction:column;gap:12px}
+.service-item{background:var(--cream);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px 18px;display:flex;align-items:center;justify-content:space-between;transition:all .2s}
+.service-item:hover{border-color:var(--orange);background:var(--orange-pale)}
+.service-name{font-weight:600;color:var(--text);font-size:14px;margin-bottom:2px}
+.service-dur{font-size:12px;color:var(--muted)}
+.service-price{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--orange)}
+.reviews-list{display:flex;flex-direction:column;gap:14px}
+.review-item{background:var(--cream);border-radius:var(--radius-sm);padding:16px;border:1px solid var(--border)}
+.review-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.review-name{font-weight:600;font-size:13px;color:var(--text)}
+.review-stars{color:var(--orange);font-size:12px}
+.review-text{font-size:13px;color:var(--text2);line-height:1.7;font-style:italic}
+
+/* BOOKING CARD */
+.booking-card{background:white;border:1.5px solid var(--border);border-radius:var(--radius);padding:24px;position:sticky;top:84px;box-shadow:var(--shadow)}
+.booking-rate{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--text);margin-bottom:4px}
+.booking-rate span{font-size:14px;font-weight:400;color:var(--muted);font-family:'DM Sans',sans-serif}
+.booking-rating{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);margin-bottom:20px}
+.booking-rating strong{color:var(--text)}
+.booking-select{width:100%;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none;margin-bottom:12px;background:white;cursor:pointer}
+.booking-select:focus{border-color:var(--orange)}
+.booking-btn{width:100%;background:var(--orange);color:white;border:none;border-radius:var(--radius-sm);padding:15px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;margin-bottom:12px}
+.booking-btn:hover{background:var(--orange2)}
+.booking-note{font-size:12px;color:var(--muted);text-align:center;line-height:1.6}
+.booking-divider{height:1px;background:var(--border);margin:16px 0}
+.booking-breakdown{display:flex;flex-direction:column;gap:8px}
+.breakdown-row{display:flex;justify-content:space-between;font-size:13px;color:var(--text2)}
+.breakdown-row.total{font-weight:700;color:var(--text);font-size:14px;padding-top:8px;border-top:1px solid var(--border)}
+.breakdown-row .green{color:#16a34a;font-size:11px}
+.profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px}
+.pstat{text-align:center;background:var(--cream);border-radius:var(--radius-sm);padding:14px;border:1px solid var(--border)}
+.pstat-num{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--orange)}
+.pstat-label{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* HOW IT WORKS */
+.how-section{padding:80px 40px;background:var(--navy);position:relative;overflow:hidden}
+.how-section::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);background-size:40px 40px}
+.how-inner{max-width:1100px;margin:0 auto;position:relative}
+.how-inner h2{color:white}
+.how-inner .section-sub{color:rgba(255,255,255,.5)}
+.how-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:48px}
+.how-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);padding:24px;position:relative}
+.how-num{font-family:'Syne',sans-serif;font-size:48px;font-weight:800;color:rgba(244,98,42,.2);line-height:1;margin-bottom:12px}
+.how-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:white;margin-bottom:8px}
+.how-body{font-size:13px;color:rgba(255,255,255,.5);line-height:1.7}
+
+/* CTA */
+.cta-section{padding:80px 40px;background:var(--orange);position:relative;overflow:hidden;text-align:center}
+.cta-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(255,255,255,.1),transparent)}
+.cta-section h2{font-family:'Syne',sans-serif;font-size:clamp(28px,4vw,48px);font-weight:800;color:white;letter-spacing:-1px;margin-bottom:16px;position:relative}
+.cta-section p{font-size:17px;color:rgba(255,255,255,.8);margin-bottom:32px;position:relative}
+.btn-white{background:white;color:var(--orange);padding:15px 32px;border-radius:100px;font-size:14px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .2s;box-shadow:0 4px 20px rgba(0,0,0,.15);font-family:'Syne',sans-serif}
+.btn-white:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.2)}
+.btn-white-ghost{background:transparent;color:white;padding:15px 24px;border-radius:100px;font-size:14px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:8px;border:2px solid rgba(255,255,255,.4);transition:all .2s;margin-left:12px}
+.btn-white-ghost:hover{border-color:white;background:rgba(255,255,255,.1)}
+
+/* FOOTER */
+footer{background:var(--navy);padding:40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;border-top:1px solid rgba(255,255,255,.06)}
+.footer-logo{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:white;text-decoration:none}
+.footer-logo span{color:var(--orange)}
+.footer-copy{font-size:12px;color:rgba(255,255,255,.3)}
+.footer-links{display:flex;gap:20px;list-style:none}
+.footer-links a{font-size:12px;color:rgba(255,255,255,.4);text-decoration:none}
+.footer-links a:hover{color:white}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
 .reveal.visible{opacity:1;transform:translateY(0)}
 .hero-tag{animation:fadeUp .5s ease .1s both}
 .hero-inner h1{animation:fadeUp .5s ease .2s both}
 .hero-sub{animation:fadeUp .5s ease .3s both}
 .hero-actions{animation:fadeUp .5s ease .4s both}
-.hero-trust{animation:fadeUp .5s ease .5s both}
-.photo-card{animation:fadeUp .6s ease .3s both}
+.hero-stats{animation:fadeUp .5s ease .5s both}
+.search-card{animation:fadeUp .6s ease .3s both}
+
+/* MOBILE */
 @media(max-width:768px){
   nav{padding:0 20px}
   .nav-links{display:none}
-  .hero{padding:100px 20px 60px;min-height:auto}
-  .hero-inner{grid-template-columns:1fr;gap:40px}
-  .photo-badge{display:none}
-  h1{font-size:38px}
-  .about-section,.services-section,.testimonials-section,.contact-section{padding:60px 20px}
-  .services-grid,.testimonials-grid{grid-template-columns:1fr}
+  .hero{padding:90px 20px 60px;min-height:auto}
+  .hero-inner{grid-template-columns:1fr;gap:32px}
+  .search-card{order:-1}
+  h1{font-size:38px;letter-spacing:-1px}
+  .modality-grid{grid-template-columns:repeat(2,1fr)}
+  .prac-grid{grid-template-columns:1fr}
+  .profile-inner{grid-template-columns:1fr}
+  .how-grid{grid-template-columns:repeat(2,1fr)}
+  .modalities,.practitioners,.profile-section,.how-section,.cta-section{padding:60px 20px}
   footer{padding:24px 20px;flex-direction:column;text-align:center}
   .reveal{opacity:1;transform:none}
 }
@@ -126,165 +227,344 @@ footer{background:var(--text);padding:32px 40px;display:flex;align-items:center;
 <body>
 
 <nav id="nav">
-  <a href="/" class="logo">The Intuitive <span>Rose</span></a>
+  <a href="/" class="logo">whe<span>ll</span>e</a>
   <ul class="nav-links">
-    <li><a href="#about">About</a></li>
-    <li><a href="#services">Services</a></li>
-    <li><a href="#testimonials">Testimonials</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ3kpttBKSR-pt9AA92tsXxpGsRebErkMfZ8BVOePpX7c7X4oihfuSUuw3hnxt1dHF4jdVDgIyyy?gv=true" target="_blank" class="nav-cta">Book a Session</a></li>
+    <li><a href="#modalities">Browse</a></li>
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#profile">Practitioners</a></li>
+    <li><a href="#" class="nav-btn">Join as Provider</a></li>
   </ul>
 </nav>
 
+<!-- HERO -->
 <div class="hero">
-  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
   <div class="hero-inner">
     <div>
-      <div class="hero-tag">🌹 Intuitive Guide & Animal Communicator</div>
-      <h1>Connect,<br>Understand,<br><em>and Heal.</em></h1>
-      <p class="hero-sub">I'm Tiffany Schultz  -  here to help you deepen your connection with both animals and yourself through intuitive awareness and energetic understanding.</p>
+      <div class="hero-tag">North Bay Area & Remote</div>
+      <h1>Wellness,<br>on your<br><em>terms.</em></h1>
+      <p class="hero-sub">Book trusted wellness practitioners — personal trainers, massage therapists, acupuncturists, nutritionists, and more. Real people, real results.</p>
       <div class="hero-actions">
-        <a href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ3kpttBKSR-pt9AA92tsXxpGsRebErkMfZ8BVOePpX7c7X4oihfuSUuw3hnxt1dHF4jdVDgIyyy?gv=true" target="_blank" class="btn-primary">Book an Animal Reading 🐾</a>
-        <a href="#services" class="btn-ghost">Explore Sessions</a>
+        <a href="#modalities" class="btn-orange">Find a Practitioner →</a>
+        <a href="#how" class="btn-ghost">How it works</a>
       </div>
-      <div class="hero-trust">
-        <span>Animal Communication</span>
-        <div class="trust-divider"></div>
-        <span>Human Intuitive Sessions</span>
-        <div class="trust-divider"></div>
-        <span>Bay Area & Remote</span>
+      <div class="hero-stats">
+        <div><div class="stat-num">50+</div><div class="stat-label">Practitioners</div></div>
+        <div><div class="stat-num">9</div><div class="stat-label">Modalities</div></div>
+        <div><div class="stat-num">★ 4.9</div><div class="stat-label">Avg rating</div></div>
       </div>
     </div>
-    <div class="photo-card">
-      <div class="photo-wrap">
-        <img src="https://raw.githubusercontent.com/parfourio/intuitive-rose/main/tiffany.jpg" alt="Tiffany Schultz" style="width:100%;height:auto;display:block;object-fit:contain"/>
+
+    <!-- Search Card -->
+    <div class="search-card">
+      <div class="search-label">What are you looking for?</div>
+      <input class="search-input" type="text" placeholder="e.g. personal trainer, massage..."/>
+      <div class="search-label">Modality</div>
+      <div class="search-cats">
+        <div class="cat-pill active" onclick="setActive(this)">All</div>
+        <div class="cat-pill" onclick="setActive(this)">Training</div>
+        <div class="cat-pill" onclick="setActive(this)">Massage</div>
+        <div class="cat-pill" onclick="setActive(this)">Nutrition</div>
+        <div class="cat-pill" onclick="setActive(this)">Yoga</div>
+        <div class="cat-pill" onclick="setActive(this)">Acupuncture</div>
       </div>
-      <div class="photo-accent">🌹</div>
-      <div class="photo-badge">
-        <div class="badge-label">Compassionate<br>Intuitive Guidance</div>
-      </div>
+      <div class="search-divider">or</div>
+      <div class="search-label" style="margin-top:12px">Location</div>
+      <select class="search-input" style="margin-bottom:16px">
+        <option>North Bay Area (all)</option>
+        <option>Marin County</option>
+        <option>Sonoma County</option>
+        <option>Napa County</option>
+        <option>Remote / Virtual</option>
+      </select>
+      <button class="search-btn" onclick="document.getElementById('profile').scrollIntoView({behavior:'smooth'})">Search Practitioners →</button>
     </div>
   </div>
 </div>
 
-<div class="about-section" id="about">
-  <div class="about-inner">
-    <div class="reveal"><div class="section-tag">About Tiffany</div></div>
-    <h2 class="reveal">A quiet knowing that<br><em>goes beyond words.</em></h2>
-    <div class="about-text reveal">
-      <p>From an early age, I've shared a quiet, natural understanding with animals  -  a sense of knowing that goes beyond words. Over time, that gift has grown into a calling: helping others listen, feel, and heal through intuitive awareness and energetic understanding.</p>
-      <p>Through Animal Communication, I help you discover what your pets are feeling, needing, and trying to express. Whether it's clarifying a behavior, easing anxiety, or strengthening your bond, these sessions bring harmony and mutual understanding between you and your animal companions.</p>
-      <p>Through Human Intuitive Sessions, I offer gentle, insight-driven guidance to help you reconnect with your inner wisdom. These sessions focus on emotional clarity, energetic balance, and the healing awareness that allows you to move forward with peace and confidence.</p>
+<!-- MODALITIES -->
+<div class="modalities" id="modalities">
+  <div class="modalities-inner">
+    <div class="section-tag reveal">Browse by modality</div>
+    <h2 class="reveal">Find your <em>path.</em></h2>
+    <p class="section-sub reveal">Every modality, one platform. Vetted practitioners, real reviews.</p>
+    <div class="modality-grid">
+      <a href="#profile" class="modality-card reveal"><div class="modality-icon">🏋️</div><div class="modality-name">Personal Training</div><div class="modality-count">12 practitioners</div></a>
+      <a href="#profile" class="modality-card reveal"><div class="modality-icon">💆</div><div class="modality-name">Massage Therapy</div><div class="modality-count">9 practitioners</div></a>
+      <a href="#profile" class="modality-card reveal"><div class="modality-icon">🧘</div><div class="modality-name">Yoga & Pilates</div><div class="modality-count">11 practitioners</div></a>
+      <a href="#profile" class="modality-card reveal"><div class="modality-icon">🥗</div><div class="modality-name">Nutrition</div><div class="modality-count">7 practitioners</div></a>
+      <a href="#profile" class="modality-card reveal"><div class="modality-icon">🪡</div><div class="modality-name">Acupuncture</div><div class="modality-count">5 practitioners</div></a>
+      <a href="#profile" class="modality-card reveal"><div class="modality-icon">🔔</div><div class="modality-name">Sound Healing</div><div class="modality-count">4 practitioners</div></a>
+      <a href="#profile" class="modality-card reveal"><div class="modality-icon">🧠</div><div class="modality-name">Therapy</div><div class="modality-count">8 practitioners</div></a>
+      <a href="#profile" class="modality-card reveal"><div class="modality-icon">💉</div><div class="modality-name">Peptides & Wellness</div><div class="modality-count">3 practitioners</div></a>
+      <a href="#profile" class="modality-card reveal"><div class="modality-icon">🌀</div><div class="modality-name">Intuitive & Energy</div><div class="modality-count">6 practitioners</div></a>
+      <a href="#profile" class="modality-card reveal" style="background:var(--navy);border-color:var(--navy)"><div class="modality-icon" style="font-size:20px;opacity:.6">+</div><div class="modality-name" style="color:white">More coming</div><div class="modality-count" style="color:rgba(255,255,255,.4)">Always growing</div></a>
     </div>
   </div>
 </div>
 
-<div class="services-section" id="services">
-  <div class="services-inner">
-    <div class="services-header reveal">
-      <div class="section-tag">Sessions</div>
-      <h2 style="margin-top:16px">How I can <em>help you.</em></h2>
-      <p style="font-size:16px;color:var(--muted);margin-top:12px;font-weight:300">Whether you're seeking to understand your pet's emotions or gain intuitive clarity in your own life.</p>
+<!-- FEATURED PRACTITIONERS -->
+<div class="practitioners" id="practitioners">
+  <div class="practitioners-inner">
+    <div class="practitioners-header">
+      <div>
+        <div class="section-tag reveal">Featured</div>
+        <h2 class="reveal">Meet our <em>practitioners.</em></h2>
+      </div>
+      <a href="#" class="view-all">View all →</a>
     </div>
-    <div class="services-grid">
-      <div class="service-card reveal">
-        <div class="service-icon">🐾</div>
-        <div class="service-name">Animal Communication</div>
-        <p class="service-desc">Animals speak through energy, emotion, and intuition  -  far beyond words. I help bridge that communication between you and your animal companion, bringing harmony, healing, and mutual trust.</p>
-        <div class="service-offerings">
-          <div class="offering">
-            <div><div class="offering-name">One-Hour Session</div><div class="offering-note">Personalized one-on-one for you and your animal</div></div>
-            <div class="offering-price">$75</div>
+    <div class="prac-grid">
+
+      <!-- Jen Summers -->
+      <a href="#profile" class="prac-card reveal">
+        <div class="prac-img">
+          <div class="prac-img-placeholder">💪</div>
+          <div class="prac-badge">⭐ Featured</div>
+        </div>
+        <div class="prac-body">
+          <div class="prac-name">Jen Summers</div>
+          <div class="prac-title">IFBB Pro · Personal Trainer · North Bay</div>
+          <div class="prac-tags">
+            <span class="prac-tag">Personal Training</span>
+            <span class="prac-tag">IFBB Pro</span>
+            <span class="prac-tag">Competition Prep</span>
           </div>
-          <div class="offering">
-            <div><div class="offering-name">Three-Session Package</div><div class="offering-note">Deep ongoing healing and support through transitions</div></div>
-            <div class="offering-price">$200</div>
-          </div>
-          <div class="offering">
-            <div><div class="offering-name">30-Min Follow-Up</div><div class="offering-note">For returning clients  -  check in and reinforce progress</div></div>
-            <div class="offering-price">$40</div>
+          <div class="prac-footer">
+            <div class="prac-rate">$150 <span>/ session</span></div>
+            <div class="prac-rating">⭐ <strong>5.0</strong> (24 reviews)</div>
           </div>
         </div>
-        <a href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ3kpttBKSR-pt9AA92tsXxpGsRebErkMfZ8BVOePpX7c7X4oihfuSUuw3hnxt1dHF4jdVDgIyyy?gv=true" target="_blank" class="service-cta">Book Animal Reading →</a>
-        <p class="service-note">Please share your pet's name, age, gender, and one clear photo at least 24 hours before your session. Your pet does not need to be present.<br><br>✦ Sorry, I do not work with lost pets.</p>
-      </div>
-      <div class="service-card reveal">
-        <div class="service-icon">✨</div>
-        <div class="service-name">Human Intuitive Sessions</div>
-        <p class="service-desc">Energy speaks before words ever do. In these sessions, we connect to your energy field to uncover emotional patterns, inner guidance, and the deeper wisdom that supports your healing and growth.</p>
-        <div class="service-offerings">
-          <div class="offering">
-            <div><div class="offering-name">One-Hour Intuitive Session</div><div class="offering-note">Deep exploration of your emotional energy and life patterns</div></div>
-            <div class="offering-price">$80</div>
+      </a>
+
+      <!-- Placeholder 2 -->
+      <a href="#" class="prac-card reveal">
+        <div class="prac-img" style="background:linear-gradient(135deg,#1a4a3a,#2d7a5a)">
+          <div class="prac-img-placeholder">🧘</div>
+          <div class="prac-badge" style="background:var(--navy)">Yoga</div>
+        </div>
+        <div class="prac-body">
+          <div class="prac-name">Maya Chen</div>
+          <div class="prac-title">Yoga & Pilates Instructor · Marin</div>
+          <div class="prac-tags">
+            <span class="prac-tag">Yoga</span>
+            <span class="prac-tag">Pilates</span>
+            <span class="prac-tag">Breathwork</span>
+          </div>
+          <div class="prac-footer">
+            <div class="prac-rate">$95 <span>/ session</span></div>
+            <div class="prac-rating">⭐ <strong>4.9</strong> (41 reviews)</div>
           </div>
         </div>
-        <a href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ0B_TdU3r1btYPB9XLVMXOPTDtnblYmntBeyAa5rBVK5UDJKtU7cEBgXd4DDgnP4NpUAzmCmi2I?gv=true" target="_blank" class="service-cta">Book Intuitive Session →</a>
-        <p class="service-note">Sessions are compassionate, grounding, and designed to restore emotional balance and peace within. Available remotely.</p>
-        <div style="margin-top:24px;border-radius:var(--radius-sm);overflow:hidden">
-          <img src="https://raw.githubusercontent.com/parfourio/intuitive-rose/main/tiffany-animal.jpg" alt="Tiffany with animal" style="width:100%;object-fit:cover;max-height:280px"/>
+      </a>
+
+      <!-- Placeholder 3 -->
+      <a href="#" class="prac-card reveal">
+        <div class="prac-img" style="background:linear-gradient(135deg,#3a1a4a,#6a2d8a)">
+          <div class="prac-img-placeholder">🔔</div>
+          <div class="prac-badge" style="background:#6a2d8a">Sound</div>
+        </div>
+        <div class="prac-body">
+          <div class="prac-name">David Ramos</div>
+          <div class="prac-title">Sound Healer · Acupuncturist · Sonoma</div>
+          <div class="prac-tags">
+            <span class="prac-tag">Sound Healing</span>
+            <span class="prac-tag">Acupuncture</span>
+          </div>
+          <div class="prac-footer">
+            <div class="prac-rate">$120 <span>/ session</span></div>
+            <div class="prac-rating">⭐ <strong>4.8</strong> (18 reviews)</div>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</div>
+
+<!-- JEN SUMMERS PROFILE -->
+<div class="profile-section" id="profile">
+  <div class="profile-inner" style="max-width:1100px;margin:0 auto">
+    <div>
+      <!-- Profile hero -->
+      <div class="profile-hero reveal">
+        <div class="profile-hero-bg">💪</div>
+        <div class="profile-hero-content">
+          <div class="profile-avatar">JS</div>
+          <div>
+            <div class="profile-name">Jen Summers</div>
+            <div class="profile-title-text">IFBB Pro · Personal Trainer · North Bay Area</div>
+            <div class="profile-verified">✓ Verified Practitioner</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="profile-stats reveal">
+        <div class="pstat"><div class="pstat-num">5.0</div><div class="pstat-label">Rating</div></div>
+        <div class="pstat"><div class="pstat-num">24</div><div class="pstat-label">Reviews</div></div>
+        <div class="pstat"><div class="pstat-num">200+</div><div class="pstat-label">Sessions</div></div>
+      </div>
+
+      <!-- Bio -->
+      <div class="profile-bio-section reveal">
+        <div class="profile-section-title">About Jen</div>
+        <div class="profile-bio">
+          I'm Jen — mom of 5, IFBB Pro competitor, and personal trainer who has worked with everyone from busy parents to Hollywood talent. I know what it's like to be completely exhausted and still show up, because I do it every day.<br><br>
+          My approach is no-nonsense but real — I meet you where you are, push you when you need it, and never make you feel judged for starting where you start. Fitness changed my life and I genuinely believe it can change yours.<br><br>
+          When I'm not training clients, you'll find me around a campfire with my kids, dancing in the kitchen, or planning my next competition. Life is full and I love it that way.
+        </div>
+        <div class="profile-vibe">
+          <div class="vibe-tag">🔥 IFBB Pro</div>
+          <div class="vibe-tag">👨‍👩‍👧‍👦 Mom of 5</div>
+          <div class="vibe-tag">🏕️ Campfire lover</div>
+          <div class="vibe-tag">💃 Dancer</div>
+          <div class="vibe-tag">⭐ Trainer to the stars</div>
+        </div>
+      </div>
+
+      <!-- Services -->
+      <div class="profile-bio-section reveal">
+        <div class="profile-section-title">Services</div>
+        <div class="services-list">
+          <div class="service-item">
+            <div><div class="service-name">1:1 Personal Training Session</div><div class="service-dur">60 min · In-person (North Bay) or virtual</div></div>
+            <div class="service-price">$150</div>
+          </div>
+          <div class="service-item">
+            <div><div class="service-name">Competition Prep Package</div><div class="service-dur">12 weeks · Custom program + weekly check-ins</div></div>
+            <div class="service-price">$1,200</div>
+          </div>
+          <div class="service-item">
+            <div><div class="service-name">Nutrition & Training Plan</div><div class="service-dur">Custom written program · Delivered in 48hrs</div></div>
+            <div class="service-price">$300</div>
+          </div>
+          <div class="service-item">
+            <div><div class="service-name">Virtual Coaching Session</div><div class="service-dur">45 min · Video call · Form review & programming</div></div>
+            <div class="service-price">$100</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reviews -->
+      <div class="profile-bio-section reveal">
+        <div class="profile-section-title">Reviews</div>
+        <div class="reviews-list">
+          <div class="review-item">
+            <div class="review-header"><div class="review-name">Sarah M.</div><div class="review-stars">★★★★★</div></div>
+            <div class="review-text">"Jen is the real deal. I've worked with a lot of trainers over the years and nobody pushes me like she does while still making me feel completely supported. I lost 22 lbs in 3 months and actually kept it off."</div>
+          </div>
+          <div class="review-item">
+            <div class="review-header"><div class="review-name">Marcus T.</div><div class="review-stars">★★★★★</div></div>
+            <div class="review-text">"I was skeptical about virtual training but Jen made it work. She corrected my form through the camera, built a program around my crazy schedule, and kept me accountable. Worth every penny."</div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="reveal" style="margin-top:20px;background:var(--rose-pale);border:1px solid rgba(196,126,138,.2);border-radius:var(--radius-sm);padding:16px 20px;font-size:13px;color:var(--muted);text-align:center">
-      If you need to reschedule, please do so 48 hours or more in advance. All sales are final  -  no refunds. You may reschedule once; additional rescheduling requires rebooking at your own expense.
-    </div>
-  </div>
-</div>
 
-<div class="testimonials-section" id="testimonials">
-  <div class="testimonials-inner">
-    <div class="testimonials-header reveal">
-      <div class="section-tag">Testimonials</div>
-      <h2 style="margin-top:16px">What others have <em>experienced.</em></h2>
-    </div>
-    <div class="testimonials-grid">
-      <div class="testimonial-card reveal">
-        <div class="quote-mark">"</div>
-        <div class="hearts">💜💜💜💜💜</div>
-        <p class="testimonial-text">When a homeless feral cat named Jonathon showed up at my house, I had no idea what to do. With no prior information, Tiffany immediately connected with him and gave me insight into his behavior and needs. She even alerted me to a possible health issue I hadn't noticed at all. Since her reading, Jonathon has grown back a full, healthy coat of fur, uses the litter box consistently, and has blossomed into a happy, well-adjusted cat. I cannot recommend Tiffany enough.</p>
-        <div class="testimonial-author"> -  Rachael</div>
+    <!-- Booking Card -->
+    <div>
+      <div class="booking-card reveal">
+        <div class="booking-rate">$150 <span>/ session</span></div>
+        <div class="booking-rating">⭐⭐⭐⭐⭐ <strong>5.0</strong> · 24 reviews</div>
+
+        <div class="search-label">Select a service</div>
+        <select class="booking-select" onchange="updatePrice(this)">
+          <option value="150">1:1 Personal Training - $150</option>
+          <option value="100">Virtual Coaching Session - $100</option>
+          <option value="300">Nutrition & Training Plan - $300</option>
+          <option value="1200">Competition Prep Package - $1,200</option>
+        </select>
+
+        <div class="search-label">Preferred date</div>
+        <input type="date" class="booking-select" style="margin-bottom:12px"/>
+
+        <div class="search-label">Location preference</div>
+        <select class="booking-select">
+          <option>In-person (North Bay Area)</option>
+          <option>Virtual / Video Call</option>
+        </select>
+
+        <div class="booking-divider"></div>
+        <div class="booking-breakdown">
+          <div class="breakdown-row"><span>Session fee</span><span id="session-fee">$150.00</span></div>
+          <div class="breakdown-row"><span>Whelle service fee <span class="green">(secure booking)</span></span><span id="service-fee">$18.00</span></div>
+          <div class="breakdown-row total"><span>Total</span><span id="total-fee">$168.00</span></div>
+        </div>
+        <div class="booking-divider"></div>
+
+        <button class="booking-btn">Request to Book →</button>
+        <div class="booking-note">No charge until Jen confirms · Free cancellation 24hrs before</div>
       </div>
-      <div class="testimonial-card reveal">
-        <div class="quote-mark">"</div>
-        <div class="hearts">💜💜💜💜💜</div>
-        <p class="testimonial-text">Tiffany is truly gifted and made such a difference for us. My dog is a rescue who struggles with anxiety. Tiffany helped me understand why he behaves the way he does and gave me so much insight into his personality. She also introduced me to using EFT (tapping) with him, which has been such a gentle and effective way to help him calm down. Even though it's been a couple of years, the things I learned from Tiffany continue to make a difference.</p>
-        <div class="testimonial-author"> -  Carly</div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="how-section" id="how">
+  <div class="how-inner">
+    <div class="section-tag reveal" style="color:var(--orange2)">Simple process</div>
+    <h2 class="reveal">How <em>Whelle</em> works.</h2>
+    <p class="section-sub reveal">Book, pay, and show up. We handle the rest.</p>
+    <div class="how-grid">
+      <div class="how-card reveal">
+        <div class="how-num">01</div>
+        <div class="how-title">Browse & discover</div>
+        <div class="how-body">Search by modality, location, or vibe. Filter by price, availability, and reviews.</div>
+      </div>
+      <div class="how-card reveal">
+        <div class="how-num">02</div>
+        <div class="how-title">Book securely</div>
+        <div class="how-body">Request your session. No charge until the practitioner confirms. Pay securely through Whelle.</div>
+      </div>
+      <div class="how-card reveal">
+        <div class="how-num">03</div>
+        <div class="how-title">Show up & connect</div>
+        <div class="how-body">In-person in the North Bay or virtual from anywhere. Your practitioner handles the rest.</div>
+      </div>
+      <div class="how-card reveal">
+        <div class="how-num">04</div>
+        <div class="how-title">Review & rebook</div>
+        <div class="how-body">Leave a review, rebook in seconds, and build an ongoing relationship with your practitioner.</div>
       </div>
     </div>
   </div>
 </div>
 
-<div class="quote-section">
-  <p class="quote-text">The least I can do is speak out for those who cannot speak for themselves.</p>
-  <div class="quote-author" style="margin-top:16px"> -  Jane Goodall</div>
-</div>
-
-<div class="contact-section" id="contact">
-  <div class="contact-inner">
-    <div class="reveal"><div class="section-tag">Get in Touch</div></div>
-    <h2 class="reveal" style="margin-top:16px">Let's <em>connect.</em></h2>
-    <p class="reveal" style="font-size:16px;color:var(--muted);margin-top:12px;font-weight:300">Ready to begin? Book a session directly or reach out with any questions.</p>
-    <div class="contact-card reveal">
-      <div class="contact-item"><span class="contact-icon">📞</span><a href="tel:4153220185">415.322.0185</a></div>
-      <div class="contact-item"><span class="contact-icon">✉️</span><a href="/cdn-cgi/l/email-protection#2e5a4748484f40576e5a464b47405a5b475a47584b5c415d4b004d4143"><span class="__cf_email__" data-cfemail="43372a2525222d3a03372b262a2d37362a372a3526312c30266d202c2e">tiffany@theintuitiverose.com</span></a></div>
-      <div class="contact-item"><span class="contact-icon">🐾</span><a href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ3kpttBKSR-pt9AA92tsXxpGsRebErkMfZ8BVOePpX7c7X4oihfuSUuw3hnxt1dHF4jdVDgIyyy?gv=true" target="_blank">Book Animal Communication →</a></div>
-      <div class="contact-item"><span class="contact-icon">✨</span><a href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ0B_TdU3r1btYPB9XLVMXOPTDtnblYmntBeyAa5rBVK5UDJKtU7cEBgXd4DDgnP4NpUAzmCmi2I?gv=true" target="_blank">Book Human Intuitive Session →</a></div>
-      <div class="contact-item"><span class="contact-icon">📧</span><a href="/cdn-cgi/l/email-protection#55213c3333343b2c15213d303c3b21203c213c2330273a26307b363a386a2620373f30362168013d27303078063026263c3a3b7067650534363e3432307067653c3b24203c272c">Inquire about 3-Session Package →</a></div>
-    </div>
-  </div>
+<!-- CTA -->
+<div class="cta-section">
+  <h2>Ready to find your <em>practitioner?</em></h2>
+  <p>Join hundreds of people in the North Bay who found their wellness match on Whelle.</p>
+  <a href="#modalities" class="btn-white">Browse Practitioners →</a>
+  <a href="#" class="btn-white-ghost">Join as a Provider</a>
 </div>
 
 <footer>
-  <a href="/" class="footer-logo">The Intuitive <span>Rose</span></a>
-  <p class="footer-copy">© 2026 Tiffany Schultz · All rights reserved</p>
-  <p class="footer-copy"><a href="mailto:tiffany@theintuitiverose.com" style="color:rgba(255,255,255,.4);text-decoration:none">tiffany@theintuitiverose.com</a> · 415.322.0185</p>
+  <a href="/" class="footer-logo">whe<span>ll</span>e</a>
+  <p class="footer-copy">© 2026 Whelle · Wellness Marketplace · North Bay Area & Remote</p>
+  <ul class="footer-links">
+    <li><a href="#">For Providers</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Privacy</a></li>
+  </ul>
 </footer>
 
 <script>
 window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',window.scrollY>40));
-const obs=new IntersectionObserver((entries)=>{entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*100);obs.unobserve(e.target)}})},{threshold:.1});
+const obs=new IntersectionObserver((entries)=>{entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*80);obs.unobserve(e.target)}})},{threshold:.1});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
-document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth',block:'start'})})});
+document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'})}})});
+function setActive(el){document.querySelectorAll('.cat-pill').forEach(p=>p.classList.remove('active'));el.classList.add('active')}
+function updatePrice(sel){
+  const price=parseFloat(sel.value);
+  const fee=Math.round(price*0.12*100)/100;
+  const total=price+fee;
+  document.getElementById('session-fee').textContent='$'+price.toFixed(2);
+  document.getElementById('service-fee').textContent='$'+fee.toFixed(2);
+  document.getElementById('total-fee').textContent='$'+total.toFixed(2);
+}
 </script>
 </body>
 </html>
+<!-- whelle -->
